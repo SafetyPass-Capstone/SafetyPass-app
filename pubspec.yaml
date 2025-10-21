@@ -48,4 +48,16 @@ flutter:
     - .env
     - assets/
 
-  #fonts:
+  fonts:
+    - family: PretendardRegular
+      fonts:
+        - asset: assets/fonts/Pretendard-Regular.ttf
+    - family: PretendardSemiBold
+      fonts:
+        - asset: assets/fonts/Pretendard-SemiBold.ttf
+    - family: PretendardExtraBold
+      fonts:
+        - asset: assets/fonts/Pretendard-ExtraBold.ttf
+    - family: AlkatraSemiBold
+      fonts:
+        - asset: assets/fonts/Alkatra-SemiBold.ttf
