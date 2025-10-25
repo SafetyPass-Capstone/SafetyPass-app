@@ -47,6 +47,7 @@ flutter:
   assets:
     - .env
     - assets/
+    - assets/images/
 
   fonts:
     - family: PretendardRegular
