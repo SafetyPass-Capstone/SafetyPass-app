@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-    ); // <-- WillPopScope 닫힘
+    );
   }
 }
 
