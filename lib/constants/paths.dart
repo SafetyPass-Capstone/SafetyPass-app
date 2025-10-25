@@ -4,4 +4,7 @@ abstract class Paths {
   static const String splash = '/splash';
   static const landing = '/';
   static const register = '/register';
+  static const String scan = '/scan';
+  static const String ticketChecking = '/ticket/checking';
+  static const String ticketPreview  = '/ticket/preview';
 }

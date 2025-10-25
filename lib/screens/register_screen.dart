@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
+import 'package:safetypass_app/constants/paths.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,74 +21,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
-        ),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        titleSpacing: 0,
-        title: Text(
-          '행사장 등록',
-          style: SafetyPassTextStyle.titleSB24,
-        ),
-      ),
 
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        children: [
-          const SizedBox(height: 12),
-
-          Text(
-            '행사장을 검색하시거나 티켓을 스캔하세요',
-            style: SafetyPassTextStyle.bodyR15,
-          ),
-
-          const SizedBox(height: 12),
-
-          // TODO: QR 스캔 연결
-          _QrScanCard(onTap: () {/* TODO: 나중에 QR 스캔 연결 */}),
-
-          const SizedBox(height: 50),
-
-          TextField(
-            controller: _searchCtrl,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search, color: Colors.white),
-              hintText: '행사장 장소 검색',
-              hintStyle: const TextStyle(color: Colors.white),
-              filled: true,
-              fillColor: const Color(0xFF120E50),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(12),
+      body: SafeArea(
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8, top: 8, bottom: 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  onPressed: () => context.pop(),
+                ),
               ),
             ),
-            style: const TextStyle(color: Colors.white),
-            onChanged: (_) {},
-          ),
 
-          const SizedBox(height: 18),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '행사장 등록',
+                    style: SafetyPassTextStyle.titleSB24,
+                  ),
+                  const SizedBox(height: 8),
 
-          // 최근 검색은 동작 X
-          Text(
-            '최근 검색',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black54),
-          ),
+                  Text(
+                    '행사장을 검색하시거나 티켓을 스캔하세요',
+                    style: SafetyPassTextStyle.bodyR15,
+                  ),
+                  const SizedBox(height: 12),
 
-          const SizedBox(height: 8),
+                  // QR 스캔 화면으로 이동
+                  _QrScanCard(onTap: () => context.push(Paths.scan)),
+                  const SizedBox(height: 50),
 
-          _VenueItem(
-            name: recentVenueName,
-            capacity: recentVenueCapacity,
-            onTap: () {},
-          ),
+                  TextField(
+                    controller: _searchCtrl,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search, color: Colors.white),
+                      hintText: '행사장 장소 검색',
+                      hintStyle: const TextStyle(color: Colors.white),
+                      filled: true,
+                      fillColor: const Color(0xFF120E50),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.white),
+                    onChanged: (_) {},
+                  ),
+                  const SizedBox(height: 18),
 
-          const SizedBox(height: 24),
-        ],
+                  Text(
+                    '최근 검색',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black54),
+                  ),
+                  const SizedBox(height: 8),
+
+                  _VenueItem(
+                    name: recentVenueName,
+                    capacity: recentVenueCapacity,
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -124,15 +132,9 @@ class _VenueItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      name,
-                      style: SafetyPassTextStyle.bodyEB17,
-                    ),
+                    Text(name, style: SafetyPassTextStyle.bodyEB17),
                     const SizedBox(height: 6),
-                    Text(
-                      '수용인원 : $capacity',
-                      style: SafetyPassTextStyle.bodyR12,
-                    ),
+                    Text('수용인원 : $capacity', style: SafetyPassTextStyle.bodyR12),
                   ],
                 ),
               ),
@@ -167,25 +169,16 @@ class _QrScanCard extends StatelessWidget {
           children: [
             const Icon(Icons.photo_camera_outlined, size: 32, color: Color(0xFF120E50)),
             const SizedBox(width: 12),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '티켓 QR 스캔',
-                   style: SafetyPassTextStyle.bodyEB20,
-                  ),
+                  Text('티켓 QR 스캔', style: SafetyPassTextStyle.bodyEB20),
                   const SizedBox(height: 6),
-
-                  Text(
-                    '좌석까지 한번에 등록하세요',
-                    style: SafetyPassTextStyle.bodyR12
-                  ),
+                  Text('좌석까지 한번에 등록하세요', style: SafetyPassTextStyle.bodyR12),
                 ],
               ),
             ),
-
             const Icon(Icons.arrow_forward_rounded, size: 20, color: Color(0xFF74B8CA)),
           ],
         ),
