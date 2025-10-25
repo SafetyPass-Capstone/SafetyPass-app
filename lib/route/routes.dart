@@ -4,6 +4,9 @@ import 'package:safetypass_app/constants/paths.dart';
 import 'package:safetypass_app/screens/splash_screen.dart';
 import 'package:safetypass_app/screens/landing_screen.dart';
 import 'package:safetypass_app/screens/register_screen.dart';
+import 'package:safetypass_app/screens/ticket_scan_screen.dart';
+import 'package:safetypass_app/screens/ticket_checking_screen.dart';
+import 'package:safetypass_app/screens/ticket_preview_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: Paths.splash,
@@ -19,6 +22,18 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Paths.register,
       builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: Paths.scan,
+      builder: (context, state) => const TicketScanScreen(),
+    ),
+    GoRoute(
+      path: Paths.ticketChecking,
+      builder: (context, state) => const TicketCheckingScreen(),
+    ),
+    GoRoute(
+      path: Paths.ticketPreview,
+      builder: (context, state) => const TicketPreviewScreen(),
     ),
   ],
 );
