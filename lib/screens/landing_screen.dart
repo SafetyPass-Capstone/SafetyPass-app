@@ -42,7 +42,7 @@ class LandingScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   child: FilledButton(
-                    onPressed: () => context.go(Paths.register),
+                    onPressed: () => context.push(Paths.register),
                     style: FilledButton.styleFrom(
                       backgroundColor: const Color(0xFF120E50),
                       foregroundColor: Colors.white,

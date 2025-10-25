@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:safetypass_app/constants/paths.dart';
 
-/// 스플래시 화면
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
   @override
