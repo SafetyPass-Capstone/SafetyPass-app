@@ -7,4 +7,5 @@ abstract class Paths {
   static const String scan = '/scan';
   static const String ticketChecking = '/ticket/checking';
   static const String ticketPreview  = '/ticket/preview';
+  static const home = '/home';
 }

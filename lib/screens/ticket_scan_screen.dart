@@ -40,7 +40,7 @@ class _TicketScanScreenState extends State<TicketScanScreen> {
     context.push(Paths.ticketChecking);
     await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
-    context.replace(Paths.ticketPreview);
+    context.go(Paths.ticketPreview);
   }
 
   void _applyTicketFromPayload(String raw) {
