@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import '../stores/event_store.dart';
-import '../models/event_models.dart';
-import '../constants/paths.dart';
+import 'package:safetypass_app/stores/event_store.dart';
+import 'package:safetypass_app/models/event_models.dart';
+import 'package:safetypass_app/constants/paths.dart';
 
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 import 'package:safetypass_app/constants/colors.dart';
@@ -38,7 +38,7 @@ class _TicketScanScreenState extends State<TicketScanScreen> {
 
   Future<void> _toCheckingThenPreview() async {
     context.push(Paths.ticketChecking);
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
     context.go(Paths.ticketPreview);
   }
@@ -49,7 +49,7 @@ class _TicketScanScreenState extends State<TicketScanScreen> {
       eventTitle: "[Play & Stay] 2025 ILLIT GLITTER DAY IN SEOUL+ Hotels",
       place: "올림픽공원 올림픽홀",
       date: "2025.06.12",
-      seat: "0A_4",
+      seat: "2E3_2",
       zone: "I자형",
       owner: "장민영",
     );

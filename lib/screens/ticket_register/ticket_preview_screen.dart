@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../stores/event_store.dart';
+import 'package:safetypass_app/stores/event_store.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 import 'package:safetypass_app/constants/colors.dart';
 
@@ -84,28 +84,33 @@ class TicketPreviewScreen extends StatelessWidget {
       ),
       bottomNavigationBar: showSubmit
           ? Padding(
-              padding: const EdgeInsets.fromLTRB(25, 0, 25, 24),
-              child: SizedBox(
-                height: 56,
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => context.go('/home'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A0A49),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
-                    textStyle: SafetyPassTextStyle.bodyEB17,
-                  ),
-                  child: const Text('티켓(좌석) 등록 완료  →'),
-                ),
-              ),
-            )
+        padding: const EdgeInsets.fromLTRB(25, 0, 25, 24),
+        child: SizedBox(
+          height: 56,
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: () => context.go('/home'),
+            style: FilledButton.styleFrom(
+              backgroundColor: const Color(0xFF1A0A49),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14)),
+              textStyle: SafetyPassTextStyle.bodyEB17,
+            ),
+            child: const Text('티켓(좌석) 등록 완료  →'),
+          ),
+        ),
+      )
           : null,
     );
   }
 
   Widget _kv(String k, String v) {
+    // 'k'가 '무대 배치'일 때만 bodyI 스타일을 적용하고, 아닐 경우 기존 bodyR15 스타일을 적용
+    final valueStyle = (k == '무대 배치')
+        ? SafetyPassTextStyle.bodyI.copyWith(color: const Color(0xFF1A0A49))
+        : SafetyPassTextStyle.bodyR15.copyWith(color: Colors.black87); //
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -113,11 +118,9 @@ class TicketPreviewScreen extends StatelessWidget {
         children: [
           Text(k,
               style: SafetyPassTextStyle.bodySB17
-                  .copyWith(color: const Color(0xFF1A0A49))),
+                  .copyWith(color: const Color(0xFF1A0A49))), //
           const SizedBox(height: 2),
-          Text(v,
-              style:
-                  SafetyPassTextStyle.bodyR15.copyWith(color: Colors.black87)),
+          Text(v, style: valueStyle),
         ],
       ),
     );
