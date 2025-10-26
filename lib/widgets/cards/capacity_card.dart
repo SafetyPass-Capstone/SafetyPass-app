@@ -1,4 +1,3 @@
-// lib/widgets/cards/capacity_card.dart
 import 'package:flutter/material.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 
