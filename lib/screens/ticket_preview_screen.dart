@@ -19,9 +19,9 @@ class TicketPreviewScreen extends StatelessWidget {
     final ticket = context.watch<EventStore>().ticket;
 
     return Scaffold(
-      backgroundColor: SafetPassColor.white,
+      backgroundColor: SafetyPassColor.white,
       appBar: AppBar(
-        backgroundColor: SafetPassColor.white,
+        backgroundColor: SafetyPassColor.white,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
