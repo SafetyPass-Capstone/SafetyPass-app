@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:safetypass_app/constants/paths.dart';
 import 'package:go_router/go_router.dart';
 import 'package:safetypass_app/constants/paths.dart';
+import 'package:safetypass_app/screens/emergency_mode/emergency_mode_screen.dart';
 import 'package:safetypass_app/screens/splash_screen.dart';
 import 'package:safetypass_app/screens/landing_screen.dart';
 import 'package:safetypass_app/screens/register_screen.dart';
@@ -10,7 +12,7 @@ import 'package:safetypass_app/screens/ticket_preview_screen.dart';
 import 'package:safetypass_app/screens/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: Paths.splash,
+  initialLocation: Paths.emergency_mode,
   routes: [
     GoRoute(
       path: Paths.splash,
@@ -40,5 +42,12 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Paths.home,
       builder: (context, state) => const HomeScreen()),
+    GoRoute(
+      path: Paths.emergency_mode,
+      pageBuilder: (context, state) => MaterialPage(
+        key: state.pageKey,
+        child: const EmergencyModeScreen(),
+      ),
+    ),
   ],
 );

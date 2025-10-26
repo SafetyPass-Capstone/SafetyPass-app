@@ -67,10 +67,10 @@ class _TicketScanScreenState extends State<TicketScanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SafetPassColor.white,
+      backgroundColor: SafetyPassColor.white,
       appBar: AppBar(
         title: Text('티켓 QR 스캔', style: SafetyPassTextStyle.titleSB24),
-        backgroundColor: SafetPassColor.white,
+        backgroundColor: SafetyPassColor.white,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -99,7 +99,8 @@ class _TicketScanScreenState extends State<TicketScanScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.45),
                   borderRadius: BorderRadius.circular(12),

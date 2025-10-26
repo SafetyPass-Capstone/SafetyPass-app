@@ -26,14 +26,15 @@ class HomeScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: SafetPassColor.white,
+        backgroundColor: SafetyPassColor.white,
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 50, 20, 24),
             children: [
               Text(
                 '긴급 상황시 앱 좌측에서 바로 긴급 모드로 전환할 수 있습니다.',
-                style: SafetyPassTextStyle.bodyEB10.copyWith(color: Colors.black54),
+                style: SafetyPassTextStyle.bodyEB10
+                    .copyWith(color: Colors.black54),
               ),
               const SizedBox(height: 10),
 
@@ -43,7 +44,8 @@ class HomeScreen extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Color(0xFFFF3B30), width: 2),
                   foregroundColor: const Color(0xFFFF3B30),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 child: const Text(
@@ -58,17 +60,30 @@ class HomeScreen extends StatelessWidget {
                 name: name,
                 capacity: capacity,
                 venue: venueName,
-                onTicketPressed: () => context.push(Paths.ticketPreview, extra: false),
+                onTicketPressed: () =>
+                    context.push(Paths.ticketPreview, extra: false),
               ),
 
               const SizedBox(height: 40),
 
               _QuickGrid(
                 items: [
-                  _QuickItem(icon: Icons.local_hospital_outlined, label: '보건실 찾기', onTap: () {}),
-                  _QuickItem(icon: Icons.place_outlined,           label: '입구 / 출구 찾기', onTap: () {}),
-                  _QuickItem(icon: Icons.map_outlined,             label: '3D 지도 보기',   onTap: () {}),
-                  _QuickItem(icon: Icons.chat_bubble_outline,      label: '행사 장소 커뮤니티', onTap: () {}),
+                  _QuickItem(
+                      icon: Icons.local_hospital_outlined,
+                      label: '보건실 찾기',
+                      onTap: () {}),
+                  _QuickItem(
+                      icon: Icons.place_outlined,
+                      label: '입구 / 출구 찾기',
+                      onTap: () {}),
+                  _QuickItem(
+                      icon: Icons.map_outlined,
+                      label: '3D 지도 보기',
+                      onTap: () {}),
+                  _QuickItem(
+                      icon: Icons.chat_bubble_outline,
+                      label: '행사 장소 커뮤니티',
+                      onTap: () {}),
                 ],
               ),
             ],
@@ -78,7 +93,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
 
 class _CapacityCard extends StatelessWidget {
   const _CapacityCard({
@@ -104,7 +118,10 @@ class _CapacityCard extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 12, offset: Offset(0, 6))],
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0x14000000), blurRadius: 12, offset: Offset(0, 6))
+        ],
       ),
       child: Row(
         children: [
@@ -112,13 +129,16 @@ class _CapacityCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('현재 $name님은', style: SafetyPassTextStyle.bodyEB17.copyWith(color: SafetPassColor.bk5)),
+                Text('현재 $name님은',
+                    style: SafetyPassTextStyle.bodyEB17
+                        .copyWith(color: SafetyPassColor.bk5)),
                 const SizedBox(height: 2),
                 Text('$capacity명을 수용 하는', style: SafetyPassTextStyle.bodyEB17),
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Icon(Icons.emoji_events_outlined, size: 18, color: Colors.black87),
+                    const Icon(Icons.emoji_events_outlined,
+                        size: 18, color: Colors.black87),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(venue, style: SafetyPassTextStyle.bodySB17),
@@ -134,8 +154,10 @@ class _CapacityCard extends StatelessWidget {
                       foregroundColor: const Color(0xFF120E50),
                       side: const BorderSide(color: Color(0xFFBFD3E1)),
                       backgroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(22)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -178,17 +200,18 @@ class _QuickGrid extends StatelessWidget {
       runSpacing: 12,
       children: items
           .map((e) => SizedBox(
-        width: itemW,
-        height: 110,
-        child: _QuickTile(item: e),
-      ))
+                width: itemW,
+                height: 110,
+                child: _QuickTile(item: e),
+              ))
           .toList(),
     );
   }
 }
 
 class _QuickItem {
-  const _QuickItem({required this.icon, required this.label, required this.onTap});
+  const _QuickItem(
+      {required this.icon, required this.label, required this.onTap});
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -209,7 +232,12 @@ class _QuickTile extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 10, offset: Offset(0, 6))],
+            boxShadow: const [
+              BoxShadow(
+                  color: Color(0x14000000),
+                  blurRadius: 10,
+                  offset: Offset(0, 6))
+            ],
             border: Border.all(color: const Color(0x11000000)),
           ),
           padding: const EdgeInsets.all(16),
@@ -218,7 +246,10 @@ class _QuickTile extends StatelessWidget {
             children: [
               Icon(item.icon, size: 30, color: Colors.green[700]),
               const SizedBox(height: 12),
-              Text(item.label, textAlign: TextAlign.center, style: SafetyPassTextStyle.bodyEB17.copyWith(color: const Color(0xFF120E50))),
+              Text(item.label,
+                  textAlign: TextAlign.center,
+                  style: SafetyPassTextStyle.bodyEB17
+                      .copyWith(color: const Color(0xFF120E50))),
             ],
           ),
         ),
