@@ -9,7 +9,7 @@ import 'package:safetypass_app/constants/colors.dart';
 class TicketPreviewScreen extends StatelessWidget {
   const TicketPreviewScreen({
     super.key,
-    this.showSubmit = true,// 홈으로 갈때는 false로 넘겨줌
+    this.showSubmit = true, // 홈으로 갈때는 false로 넘겨줌
   });
 
   final bool showSubmit;
@@ -29,7 +29,6 @@ class TicketPreviewScreen extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -46,7 +45,10 @@ class TicketPreviewScreen extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(18),
                 boxShadow: const [
-                  BoxShadow(color: Color(0x1F000000), blurRadius: 12, offset: Offset(0, 8)),
+                  BoxShadow(
+                      color: Color(0x1F000000),
+                      blurRadius: 12,
+                      offset: Offset(0, 8)),
                 ],
               ),
               child: Stack(
@@ -56,7 +58,8 @@ class TicketPreviewScreen extends StatelessWidget {
                     children: [
                       Text(
                         '[Play & Stay]\n2025 ILLIT GLITTER DAY\nIN SEOUL+ Hotels',
-                        style: SafetyPassTextStyle.bodyEB20.copyWith(color: const Color(0xFF1A0A49)),
+                        style: SafetyPassTextStyle.bodyEB20
+                            .copyWith(color: const Color(0xFF1A0A49)),
                       ),
                       const SizedBox(height: 16),
                       _kv('장소', ticket?.place ?? '-'),
@@ -67,8 +70,10 @@ class TicketPreviewScreen extends StatelessWidget {
                     ],
                   ),
                   Positioned(
-                    right: 0, bottom: 0,
-                    child: Image.asset('assets/images/ticket-char.png', height: 190),
+                    right: 0,
+                    bottom: 0,
+                    child: Image.asset('assets/images/ticket-char.png',
+                        height: 190),
                   ),
                 ],
               ),
@@ -77,25 +82,25 @@ class TicketPreviewScreen extends StatelessWidget {
           ],
         ),
       ),
-
       bottomNavigationBar: showSubmit
           ? Padding(
-        padding: const EdgeInsets.fromLTRB(25, 0, 25, 24),
-        child: SizedBox(
-          height: 56,
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: () => context.go('/home'),
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF1A0A49),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-              textStyle: SafetyPassTextStyle.bodyEB17,
-            ),
-            child: const Text('티켓(좌석) 등록 완료  →'),
-          ),
-        ),
-      )
+              padding: const EdgeInsets.fromLTRB(25, 0, 25, 24),
+              child: SizedBox(
+                height: 56,
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => context.go('/home'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF1A0A49),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14)),
+                    textStyle: SafetyPassTextStyle.bodyEB17,
+                  ),
+                  child: const Text('티켓(좌석) 등록 완료  →'),
+                ),
+              ),
+            )
           : null,
     );
   }
@@ -106,9 +111,13 @@ class TicketPreviewScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(k, style: SafetyPassTextStyle.bodySB17.copyWith(color: const Color(0xFF1A0A49))),
+          Text(k,
+              style: SafetyPassTextStyle.bodySB17
+                  .copyWith(color: const Color(0xFF1A0A49))),
           const SizedBox(height: 2),
-          Text(v, style: SafetyPassTextStyle.bodyR15.copyWith(color: Colors.black87)),
+          Text(v,
+              style:
+                  SafetyPassTextStyle.bodyR15.copyWith(color: Colors.black87)),
         ],
       ),
     );

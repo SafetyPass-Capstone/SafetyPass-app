@@ -32,6 +32,8 @@ dependencies:
   get_it: ^7.7.0
   # network
   dio: ^5.3.2
+  #csv
+  csv: ^5.0.0
 
 dev_dependencies:
   flutter_test:

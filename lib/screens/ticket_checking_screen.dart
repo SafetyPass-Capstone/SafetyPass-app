@@ -8,15 +8,18 @@ class TicketCheckingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SafetPassColor.white,
+      backgroundColor: SafetyPassColor.white,
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset('assets/images/ticket-checking-char.png', height: 150, fit: BoxFit.contain),
+              Image.asset('assets/images/ticket-checking-char.png',
+                  height: 150, fit: BoxFit.contain),
               const SizedBox(height: 12),
-              Text('티켓 확인 중 ...', style: SafetyPassTextStyle.bodySB17.copyWith(color: const Color(0xFF120E50))),
+              Text('티켓 확인 중 ...',
+                  style: SafetyPassTextStyle.bodySB17
+                      .copyWith(color: const Color(0xFF120E50))),
             ],
           ),
         ),
