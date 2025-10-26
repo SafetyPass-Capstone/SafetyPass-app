@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final class SafetPassColor {
+final class SafetyPassColor {
   // Brand Color
   static const blue = Color(0xFF000000);
   static const green = Color(0xFF51EC8B);
