@@ -230,7 +230,6 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
         decoration: BoxDecoration(
           color: SafetyPassColor.systemGray05,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: SafetyPassColor.white, width: 1),
         ),
         child: CustomPaint(
           painter: StadiumMapPainter(

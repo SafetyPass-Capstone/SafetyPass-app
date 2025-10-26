@@ -12,7 +12,7 @@ import 'package:safetypass_app/screens/ticket_preview_screen.dart';
 import 'package:safetypass_app/screens/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: Paths.splash,
+  initialLocation: Paths.emergency_mode,
   routes: [
     GoRoute(
       path: Paths.splash,
