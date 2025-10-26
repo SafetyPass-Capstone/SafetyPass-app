@@ -106,21 +106,46 @@ class TicketPreviewScreen extends StatelessWidget {
   }
 
   Widget _kv(String k, String v) {
-    // 'k'가 '무대 배치'일 때만 bodyI 스타일을 적용하고, 아닐 경우 기존 bodyR15 스타일을 적용
-    final valueStyle = (k == '무대 배치')
-        ? SafetyPassTextStyle.bodyI.copyWith(color: const Color(0xFF1A0A49))
-        : SafetyPassTextStyle.bodyR15.copyWith(color: Colors.black87); //
+    final keyStyle =
+    SafetyPassTextStyle.bodySB17.copyWith(color: const Color(0xFF1A0A49));
+    Widget valueWidget;
+
+    // 'k'가 '무대 배치'이고 'v'가 'I'로 시작하는 경우 (예: "I자형")
+    if (k == '무대 배치' && v.startsWith('I')) {
+      const specialColor = Color(0xFF1A0A49);
+
+      valueWidget = RichText(
+        text: TextSpan(
+          // "자형" 부분에 적용될 기본 스타일 (bodyR15 + 색상)
+          style: SafetyPassTextStyle.bodyR15.copyWith(color: specialColor),
+          children: [
+            // "I" 부분 (bodyI + 색상)
+            TextSpan(
+              text: v.substring(0, 1), // "I"
+              style: SafetyPassTextStyle.bodyI.copyWith(color: specialColor),
+            ),
+            // "자형" 부분 (위의 부모 style 상속)
+            TextSpan(
+              text: v.substring(1),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // 그 외 모든 일반 값
+      final valueStyle =
+      SafetyPassTextStyle.bodyR15.copyWith(color: Colors.black87);
+      valueWidget = Text(v, style: valueStyle);
+    }
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(k,
-              style: SafetyPassTextStyle.bodySB17
-                  .copyWith(color: const Color(0xFF1A0A49))), //
+          Text(k, style: keyStyle),
           const SizedBox(height: 2),
-          Text(v, style: valueStyle),
+          valueWidget,
         ],
       ),
     );

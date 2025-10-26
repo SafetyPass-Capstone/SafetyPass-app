@@ -38,6 +38,7 @@ class _TicketScanScreenState extends State<TicketScanScreen> {
 
   Future<void> _toCheckingThenPreview() async {
     context.push(Paths.ticketChecking);
+    // !!QR 스캔 시간 바꾸려면 여기서 바꾸세요!!
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
     context.go(Paths.ticketPreview);

@@ -57,7 +57,7 @@ final class SafetyPassTextStyle {
   );
 
   static const TextStyle bodyI = TextStyle(
-    fontFamily: "NotoSerifMalayalamRegular",
-    fontSize: 17,
+    fontFamily: "Noto Serif Malayalam",
+    fontSize: 15,
   );
 }

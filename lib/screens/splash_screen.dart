@@ -17,10 +17,10 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _fade = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 400),
     )..forward();
 
-    Future.delayed(const Duration(milliseconds: 900), () {
+    Future.delayed(const Duration(milliseconds: 800), () {
       if (!mounted) return;
       context.go(Paths.landing);
     });
