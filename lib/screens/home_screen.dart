@@ -71,7 +71,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildInfoText() {
     return Text(
-      '긴급 상황시 앱 좌측에서 바로 긴급 모드로 전환할 수 있습니다.',
+      '긴급 상황시 앱 자체에서 바로 긴급 모드로 전환할 수 있습니다.',
       style: SafetyPassTextStyle.bodyEB10.copyWith(color: Colors.black54),
       textAlign: TextAlign.center,
     );
