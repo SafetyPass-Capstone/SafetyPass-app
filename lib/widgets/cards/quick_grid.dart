@@ -1,4 +1,3 @@
-// lib/widgets/cards/quick_grid.dart
 import 'package:flutter/material.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 
@@ -23,8 +22,8 @@ class QuickGrid extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: items
           .map((e) => SizedBox(
-        width: itemW,  // 3. 고정값 161 대신 계산된 itemW를 사용합니다.
-        height: 142, // 높이는 피그마 값(142)을 유지합니다.
+        width: itemW,
+        height: 142,
         child: _QuickTile(item: e),
       ))
           .toList(),
@@ -32,7 +31,6 @@ class QuickGrid extends StatelessWidget {
   }
 }
 
-// _QuickTile은 수정할 필요 없습니다.
 class _QuickTile extends StatelessWidget {
   const _QuickTile({required this.item});
   final QuickItem item;
