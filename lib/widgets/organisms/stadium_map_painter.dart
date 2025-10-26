@@ -219,7 +219,7 @@ class StadiumMapPainter extends CustomPainter {
         ..style = PaintingStyle.fill;
 
       final rect = RRect.fromRectAndRadius(
-        Rect.fromCenter(center: point, width: 50, height: 15),
+        Rect.fromCenter(center: point, width: 43, height: 13),
         const Radius.circular(8),
       );
 
