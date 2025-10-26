@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../stores/event_store.dart';
-import '../models/event_models.dart';
-import '../constants/paths.dart';
+import 'package:safetypass_app/stores/event_store.dart';
+import 'package:safetypass_app/models/event_models.dart';
+import 'package:safetypass_app/constants/paths.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 import 'package:safetypass_app/constants/colors.dart';
 
