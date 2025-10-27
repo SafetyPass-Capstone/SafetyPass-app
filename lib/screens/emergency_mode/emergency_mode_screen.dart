@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safetypass_app/constants/colors.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 import 'package:safetypass_app/widgets/atoms/texts/texts.dart';
+import 'package:safetypass_app/widgets/emergency_button.dart';
 import 'package:safetypass_app/widgets/organisms/stadium_map_widget.dart';
 
 class EmergencyModeScreen extends StatefulWidget {
@@ -26,7 +27,13 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
             child: Column(
               children: [
                 // 상단 제목
-                _buildTitle(),
+                EmergencyButton(
+                  text: '긴급 대피 모드',
+                  isOn: true,
+                  onTap: () {
+                    //TODO 모드 전환 라우팅
+                  },
+                ),
                 const SizedBox(height: 20),
 
                 // 2D/3D 탭 버튼
@@ -35,11 +42,11 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
 
                 // 좌석 맵
                 _buildStadiumMapContainer(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
                 // 최적 탈출구 탐색 버튼
                 _buildSearchButton(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
                 // 내 좌석 & 예상 대피시간 정보
                 _buildInfoBoxes(),
@@ -52,25 +59,11 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
   }
 
   // 상단 제목
-  Widget _buildTitle() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(
-        '긴급 대피 모드',
-        style:
-            SafetyPassTextStyle.bodyEB17.copyWith(color: SafetyPassColor.white),
-      ),
-    );
-  }
 
   // 2D/3D 토글 버튼
   Widget _build2D3DToggle() {
     return Container(
-      height: 46,
+      height: 40,
       decoration: BoxDecoration(
         color: const Color(0xFF000000),
         borderRadius: BorderRadius.circular(10),
@@ -171,7 +164,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: SafetyPassColor.green,
           borderRadius: BorderRadius.circular(10),
@@ -192,10 +185,10 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
         // 내 좌석
         Expanded(
           child: Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: SafetyPassColor.systemGray05,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: SafetyPassColor.white,
                 width: 1,
@@ -206,7 +199,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                 Text('내 좌석',
                     style: SafetyPassTextStyle.bodyEB17
                         .copyWith(color: SafetyPassColor.white)),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
                 Text('2E1_4',
                     style: SafetyPassTextStyle.bodyEB30
                         .copyWith(color: SafetyPassColor.white)),
@@ -219,10 +212,10 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
         // 예상 대피시간
         Expanded(
           child: Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: SafetyPassColor.systemGray05,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: SafetyPassColor.white,
                 width: 1,
@@ -233,7 +226,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                 Text('예상 대피시간',
                     style: SafetyPassTextStyle.bodyEB17
                         .copyWith(color: SafetyPassColor.white)),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
                 Text('−',
                     style: SafetyPassTextStyle.bodyEB30
                         .copyWith(color: SafetyPassColor.white)),
