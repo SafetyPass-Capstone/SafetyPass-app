@@ -15,6 +15,7 @@ class StadiumMapPainter extends CustomPainter {
   final List<String> evacuationPath;
   final Map<String, Offset> nodeCoordinates;
   final List<String> closedExits;
+  final Offset? fireLocation;
 
   StadiumMapPainter({
     required this.seats,
@@ -26,6 +27,7 @@ class StadiumMapPainter extends CustomPainter {
     this.evacuationPath = const [],
     this.nodeCoordinates = const {},
     this.closedExits = const [],
+    this.fireLocation,
   });
 
   @override
@@ -49,11 +51,15 @@ class StadiumMapPainter extends CustomPainter {
     if (evacuationPath.isNotEmpty) {
       _drawEvacuationPath(canvas, transform);
     }
+    // 화재 위치 마킹
+    if (fireLocation != null) {
+      _drawFireLocation(canvas, transform);
+    }
 
     _drawExits(canvas, transform);
   }
 
-  // 대피 경로 그리기 (추가)
+  // 대피 경로 그리기
   void _drawEvacuationPath(
       Canvas canvas, Offset Function(double, double) transform) {
     if (evacuationPath.length < 2) return;
@@ -93,11 +99,47 @@ class StadiumMapPainter extends CustomPainter {
     // 경로 선 그리기
     canvas.drawPath(path, pathPaint);
 
-    // 경로 노드 강조 (선택사항)
+    // 경로 노드 강조
     _drawPathNodes(canvas, transform);
   }
 
-  // 경로 노드 강조 (추가)
+  // 화제 위치
+  void _drawFireLocation(
+      Canvas canvas, Offset Function(double, double) transform) {
+    // X자 그리기용 페인트
+    final linePaint = Paint()
+      ..color = const Color(0xFFFF4D4D)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3.0
+      ..strokeCap = StrokeCap.round;
+
+    // 글로우(
+    final glowPaint = Paint()
+      ..color = const Color(0x66FF4D4D)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8.0
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+    // 화면 스케일과 무관한 고정 길이(픽셀 기준)
+    const half = 5.0;
+
+    final world = fireLocation!;
+    final p = transform(world.dx, world.dy);
+
+    // 글로우
+    canvas.drawLine(Offset(p.dx - half, p.dy - half),
+        Offset(p.dx + half, p.dy + half), glowPaint);
+    canvas.drawLine(Offset(p.dx - half, p.dy + half),
+        Offset(p.dx + half, p.dy - half), glowPaint);
+
+    // 실제 X 선
+    canvas.drawLine(Offset(p.dx - half, p.dy - half),
+        Offset(p.dx + half, p.dy + half), linePaint);
+    canvas.drawLine(Offset(p.dx - half, p.dy + half),
+        Offset(p.dx + half, p.dy - half), linePaint);
+  }
+
+  // 경로 노드 강조
   void _drawPathNodes(
       Canvas canvas, Offset Function(double, double) transform) {
     final nodePaint = Paint()
@@ -505,7 +547,8 @@ class StadiumMapPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant StadiumMapPainter oldDelegate) {
     return evacuationPath != oldDelegate.evacuationPath ||
-        closedExits != oldDelegate.closedExits; // 폐쇄 출구 변경 시 리페인트
+        closedExits != oldDelegate.closedExits ||
+        fireLocation != oldDelegate.fireLocation;
   }
 }
 

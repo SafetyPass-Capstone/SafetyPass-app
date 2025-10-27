@@ -10,11 +10,13 @@ import 'package:safetypass_app/models/stadium_map_models.dart';
 class StadiumMapWidget extends StatefulWidget {
   final List<String> evacuationPath;
   final List<String> closedExits;
+  final String? fireLocation;
 
   const StadiumMapWidget({
     Key? key,
     this.evacuationPath = const [],
     this.closedExits = const [],
+    this.fireLocation,
   }) : super(key: key);
 
   @override
@@ -252,6 +254,11 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
       );
     }
 
+    Offset? fireOffset;
+    if (widget.fireLocation != null) {
+      fireOffset = nodeCoordinates[widget.fireLocation!]; // ← 노드ID를 좌표로
+    }
+
     return InteractiveViewer(
       transformationController: _transformationController,
       boundaryMargin: const EdgeInsets.all(100),
@@ -275,6 +282,7 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
             evacuationPath: widget.evacuationPath,
             nodeCoordinates: nodeCoordinates,
             closedExits: widget.closedExits,
+            fireLocation: fireOffset,
           ),
         ),
       ),
