@@ -19,6 +19,9 @@ class EmergencyModeProvider extends ChangeNotifier {
   Timer? _monitoringTimer;
   StreamSubscription? _streamSubscription;
 
+  // 대피 경로
+  List<String> get evacuationPath => evacuationInfo?.evacuationPath ?? [];
+
   EmergencyModeProvider() {
     // 초기 데이터 로드
     getEvacuationInfo();

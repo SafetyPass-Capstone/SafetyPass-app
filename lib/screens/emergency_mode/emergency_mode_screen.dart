@@ -46,7 +46,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                       const SizedBox(height: 20),
 
                       // 좌석 맵
-                      _buildStadiumMapContainer(),
+                      _buildStadiumMapContainer(provider),
                       const SizedBox(height: 20),
 
                       // 최적 탈출구 탐색 버튼
@@ -146,7 +146,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
   }
 
   // 경기장 맵 컨테이너
-  Widget _buildStadiumMapContainer() {
+  Widget _buildStadiumMapContainer(EmergencyModeProvider provider) {
     return Container(
       height: 270,
       decoration: BoxDecoration(
@@ -159,7 +159,9 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: const StadiumMapWidget(),
+        child: StadiumMapWidget(
+          evacuationPath: provider.evacuationPath, // 대피 경로 전달
+        ),
       ),
     );
   }
