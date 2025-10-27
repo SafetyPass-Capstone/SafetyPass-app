@@ -5,10 +5,10 @@ import 'package:safetypass_app/constants/paths.dart';
 import 'package:safetypass_app/screens/emergency_mode/emergency_mode_screen.dart';
 import 'package:safetypass_app/screens/splash_screen.dart';
 import 'package:safetypass_app/screens/landing_screen.dart';
-import 'package:safetypass_app/screens/register_screen.dart';
-import 'package:safetypass_app/screens/ticket_scan_screen.dart';
-import 'package:safetypass_app/screens/ticket_checking_screen.dart';
-import 'package:safetypass_app/screens/ticket_preview_screen.dart';
+import 'package:safetypass_app/screens/ticket_register/register_screen.dart';
+import 'package:safetypass_app/screens/ticket_register/ticket_scan_screen.dart';
+import 'package:safetypass_app/screens/ticket_register/ticket_checking_screen.dart';
+import 'package:safetypass_app/screens/ticket_register/ticket_preview_screen.dart';
 import 'package:safetypass_app/screens/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(

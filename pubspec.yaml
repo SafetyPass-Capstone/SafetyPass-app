@@ -66,3 +66,6 @@ flutter:
     - family: AlkatraSemiBold
       fonts:
         - asset: assets/fonts/Alkatra-SemiBold.ttf
+    - family: Noto Serif Malayalam
+      fonts:
+        - asset: assets/fonts/NotoSerifMalayalam-Regular.ttf

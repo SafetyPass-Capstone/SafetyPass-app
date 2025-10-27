@@ -9,7 +9,7 @@ class TicketInfo {
   final String place;
   final String date;
   final String seat;  // 예: "0A_4"
-  final String zone;  // 예: "1자형"
+  final String zone;  // 예: "I자형"
   final String owner; // 예: "장민영"
 
   const TicketInfo({

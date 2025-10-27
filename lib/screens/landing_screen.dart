@@ -8,7 +8,6 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
     final bottomLift = MediaQuery.of(context).size.height * 0.12;
 
     return Scaffold(
