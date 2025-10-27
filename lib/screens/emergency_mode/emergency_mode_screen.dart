@@ -24,38 +24,44 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
       child: Scaffold(
         backgroundColor: SafetyPassColor.systemGray05,
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  // 상단 제목
-                  EmergencyButton(
-                    text: '긴급 대피 모드',
-                    isOn: true,
-                    onTap: () {
-                      //TODO 모드 전환 라우팅
-                    },
+          child: Consumer<EmergencyModeProvider>(
+            builder: (context, provider, child) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      // 상단 제목
+                      EmergencyButton(
+                        text: '긴급 대피 모드',
+                        isOn: true,
+                        onTap: () {
+                          //TODO 모드 전환 라우팅
+                        },
+                      ),
+                      const SizedBox(height: 20),
+
+                      // 2D/3D 탭 버튼
+                      _build2D3DToggle(),
+                      const SizedBox(height: 20),
+
+                      // 좌석 맵
+                      _buildStadiumMapContainer(),
+                      const SizedBox(height: 20),
+
+                      // 최적 탈출구 탐색 버튼
+                      provider.isMonitoring
+                          ? _buildEvacuationInfoBox(provider)
+                          : _buildSearchButton(provider),
+                      const SizedBox(height: 20),
+
+                      // 내 좌석 & 예상 대피시간 정보
+                      _buildInfoBoxes(provider),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-
-                  // 2D/3D 탭 버튼
-                  _build2D3DToggle(),
-                  const SizedBox(height: 20),
-
-                  // 좌석 맵
-                  _buildStadiumMapContainer(),
-                  const SizedBox(height: 30),
-
-                  // 최적 탈출구 탐색 버튼
-                  _buildSearchButton(),
-                  const SizedBox(height: 30),
-
-                  // 내 좌석 & 예상 대피시간 정보
-                  _buildInfoBoxes(),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -158,112 +164,140 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
     );
   }
 
-  // 최적 탈출구 탐색 버튼 (Provider 연결)
-  Widget _buildSearchButton() {
-    return Consumer<EmergencyModeProvider>(
-      builder: (context, provider, child) {
-        return GestureDetector(
-          onTap: provider.isLoading
-              ? null
-              : () {
-                  provider.getEvacuationInfo();
-                },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: provider.isLoading
-                  ? SafetyPassColor.systemGray03
-                  : SafetyPassColor.green,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            child: provider.isLoading
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 3,
-                    ),
-                  )
-                : const Text(
-                    '최적 탈출구 탐색',
-                    style: SafetyPassTextStyle.bodyEB30,
-                  ),
-          ),
-        );
+  // 최적 탈출구 탐색 버튼
+  Widget _buildSearchButton(EmergencyModeProvider provider) {
+    return GestureDetector(
+      onTap: () {
+        provider.toggleMonitoring();
       },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: SafetyPassColor.green,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          '최적 탈출구 탐색',
+          style: SafetyPassTextStyle.bodyEB30,
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 
-  // 내 좌석 & 예상 대피시간 정보 박스 (Provider 연결)
-  Widget _buildInfoBoxes() {
-    return Consumer<EmergencyModeProvider>(
-      builder: (context, provider, child) {
-        final info = provider.evacuationInfo;
+  // 대피 정보 박스
+  Widget _buildEvacuationInfoBox(EmergencyModeProvider provider) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 최적 탈출구 알림 박스
+        Container(
+          width: 350,
+          height: 40,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: SafetyPassColor.green,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            '최적 탈출구',
+            style: SafetyPassTextStyle.bodyEB17
+                .copyWith(color: SafetyPassColor.systemGray05),
+            textAlign: TextAlign.center,
+          ),
+        ),
 
-        return Row(
-          children: [
-            // 내 좌석
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: SafetyPassColor.systemGray05,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: SafetyPassColor.white,
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Text('내 좌석',
-                        style: SafetyPassTextStyle.bodyEB17
-                            .copyWith(color: SafetyPassColor.white)),
-                    const SizedBox(height: 5),
-                    Text(provider.seat,
-                        style: SafetyPassTextStyle.bodyEB30
-                            .copyWith(color: SafetyPassColor.white)),
-                  ],
-                ),
+        const SizedBox(height: 10),
+
+        // 탈출구
+        Container(
+          width: 350,
+          height: 90,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: SafetyPassColor.systemGray05,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: SafetyPassColor.white,
+              width: 1,
+            ),
+          ),
+          child: Text(
+            '최적 탈출구',
+            style: SafetyPassTextStyle.bodyEB50
+                .copyWith(color: SafetyPassColor.green),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 내 좌석 & 예상 대피시간 정보 박스
+  Widget _buildInfoBoxes(EmergencyModeProvider provider) {
+    final info = provider.evacuationInfo;
+
+    return Row(
+      children: [
+        // 내 좌석
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: SafetyPassColor.systemGray05,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: SafetyPassColor.white,
+                width: 1,
               ),
             ),
-            const SizedBox(width: 16),
+            child: Column(
+              children: [
+                Text('내 좌석',
+                    style: SafetyPassTextStyle.bodyEB17
+                        .copyWith(color: SafetyPassColor.white)),
+                const SizedBox(height: 5),
+                Text(provider.seat,
+                    style: SafetyPassTextStyle.bodyEB30
+                        .copyWith(color: SafetyPassColor.white)),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
 
-            // 예상 대피시간
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: SafetyPassColor.systemGray05,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: SafetyPassColor.white,
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Text('예상 대피시간',
-                        style: SafetyPassTextStyle.bodyEB17
-                            .copyWith(color: SafetyPassColor.white)),
-                    const SizedBox(height: 5),
-                    Text(
-                      info?.isEmergency == true
-                          ? info?.estimatedTime ?? '−'
-                          : '−',
-                      style: SafetyPassTextStyle.bodyEB30
-                          .copyWith(color: SafetyPassColor.white),
-                    ),
-                  ],
-                ),
+        // 예상 대피시간
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: SafetyPassColor.systemGray05,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: SafetyPassColor.white,
+                width: 1,
               ),
             ),
-          ],
-        );
-      },
+            child: Column(
+              children: [
+                Text('예상 대피시간',
+                    style: SafetyPassTextStyle.bodyEB17
+                        .copyWith(color: SafetyPassColor.white)),
+                const SizedBox(height: 5),
+                Text(
+                  info?.isEmergency == true ? info?.estimatedTime ?? '−' : '−',
+                  style: SafetyPassTextStyle.bodyEB30
+                      .copyWith(color: SafetyPassColor.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
