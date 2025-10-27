@@ -12,8 +12,9 @@ class StadiumMapPainter extends CustomPainter {
   final List<LayerPolygon> stages;
   final List<AisleNode> aisleNodes;
   final List<EdgeConnection> edges;
-  final List<String> evacuationPath; // 추가
-  final Map<String, Offset> nodeCoordinates; // 추가
+  final List<String> evacuationPath;
+  final Map<String, Offset> nodeCoordinates;
+  final List<String> closedExits;
 
   StadiumMapPainter({
     required this.seats,
@@ -24,6 +25,7 @@ class StadiumMapPainter extends CustomPainter {
     required this.edges,
     this.evacuationPath = const [],
     this.nodeCoordinates = const {},
+    this.closedExits = const [],
   });
 
   @override
@@ -312,13 +314,14 @@ class StadiumMapPainter extends CustomPainter {
 
     for (var exit in exits) {
       final point = transform(exit.x, exit.y);
+      final isClosed = closedExits.contains(exit.nodeId);
 
-      // 글로우 효과
-      _drawGlow(canvas, point);
+      // 글로우
+      _drawExitGlow(canvas, point, isClosed);
 
-      // 배경
+      // 배경 색상
       final bgPaint = Paint()
-        ..color = const Color(0xFFD6FFE0)
+        ..color = isClosed ? const Color(0xFFFF0000) : const Color(0xFFD6FFE0)
         ..style = PaintingStyle.fill;
 
       final rect = RRect.fromRectAndRadius(
@@ -332,19 +335,61 @@ class StadiumMapPainter extends CustomPainter {
       final textPainter = TextPainter(
         text: TextSpan(
           text: exit.nodeId.toUpperCase(),
-          style: SafetyPassTextStyle.bodyEB10
-              .copyWith(color: SafetyPassColor.systemGray05),
+          style: SafetyPassTextStyle.bodyEB10.copyWith(
+            color: SafetyPassColor.systemGray05,
+          ),
         ),
         textDirection: TextDirection.ltr,
       );
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset(
-          point.dx - textPainter.width / 2,
-          point.dy - textPainter.height / 2,
-        ),
+        Offset(point.dx - textPainter.width / 2,
+            point.dy - textPainter.height / 2),
       );
+    }
+  }
+
+// 출구용 글로우(상태별)
+  void _drawExitGlow(Canvas canvas, Offset point, bool isClosed) {
+    final rect = RRect.fromRectAndRadius(
+      Rect.fromCenter(center: point, width: 50, height: 15),
+      const Radius.circular(8),
+    );
+
+    // 폐쇄: 레드 글로우 / 정상: 기존 그린 글로우
+    final paints = isClosed
+        ? [
+            Paint()
+              ..color = const Color(0x4DFF3A3A)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x66FF3A3A)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x99FF3A3A)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
+              ..style = PaintingStyle.fill,
+          ]
+        : [
+            Paint()
+              ..color = const Color(0x4D3AF766)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x663AF766)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x993AF766)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
+              ..style = PaintingStyle.fill,
+          ];
+
+    for (var paint in paints) {
+      canvas.drawRRect(rect, paint);
     }
   }
 
@@ -459,7 +504,8 @@ class StadiumMapPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant StadiumMapPainter oldDelegate) {
-    return evacuationPath != oldDelegate.evacuationPath; // 경로 변경 시 다시 그리기
+    return evacuationPath != oldDelegate.evacuationPath ||
+        closedExits != oldDelegate.closedExits; // 폐쇄 출구 변경 시 리페인트
   }
 }
 

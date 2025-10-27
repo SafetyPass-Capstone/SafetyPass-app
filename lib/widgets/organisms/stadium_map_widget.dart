@@ -8,11 +8,13 @@ import 'package:safetypass_app/widgets/organisms/stadium_map_painter.dart';
 import 'package:safetypass_app/models/stadium_map_models.dart';
 
 class StadiumMapWidget extends StatefulWidget {
-  final List<String> evacuationPath; // 추가
+  final List<String> evacuationPath;
+  final List<String> closedExits;
 
   const StadiumMapWidget({
     Key? key,
-    this.evacuationPath = const [], // 기본값
+    this.evacuationPath = const [],
+    this.closedExits = const [],
   }) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
   List<AisleNode> aisleNodes = [];
   List<EdgeConnection> edges = [];
 
-  // 좌표 매핑 (추가) - nodeId -> (x, y)
+  // 좌표 매핑 - nodeId -> (x, y)
   Map<String, Offset> nodeCoordinates = {};
 
   bool isLoading = true;
@@ -270,8 +272,9 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
             stages: stages,
             aisleNodes: aisleNodes,
             edges: edges,
-            evacuationPath: widget.evacuationPath, // 전달
-            nodeCoordinates: nodeCoordinates, // 전달
+            evacuationPath: widget.evacuationPath,
+            nodeCoordinates: nodeCoordinates,
+            closedExits: widget.closedExits,
           ),
         ),
       ),

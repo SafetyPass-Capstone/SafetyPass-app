@@ -161,6 +161,8 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
         borderRadius: BorderRadius.circular(10),
         child: StadiumMapWidget(
           evacuationPath: provider.evacuationPath, // 대피 경로 전달
+          closedExits:
+              provider.evacuationInfo?.closedExits ?? const [], // 폐쇠 출구 전달
         ),
       ),
     );
