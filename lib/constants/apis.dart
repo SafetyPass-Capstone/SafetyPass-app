@@ -7,5 +7,5 @@ abstract class Apis {
   /// baseUrl 끝에 /가 있어서, 여기서는 맨 앞에 /을 빼고 기입한다.
 
   /// 특정 좌석의 대피 정보 조회 api
-  static const String getEvacuationInfo = "getEvacuationInfo/";
+  static const String getEvacuationInfo = "evacuation-info/";
 }

@@ -5,13 +5,11 @@ import 'package:safetypass_app/data/dto/response/evacuation_info/evacuation_info
 
 class FrontedEmergencyService {
   final ApiClient _apiClient = ApiClient();
-  static const apiType = "api/fronted/";
+  static const apiType = "api/frontend/";
 
   /// 특정 좌석의 대피 정보 조회 sidebar.py의 render_evacuation_path_selector()와 동일한 계산 방식 사용
-  Future<EvacuationInfoResponse> getEvacuationInfo() async {
+  Future<EvacuationInfoResponse> getEvacuationInfo(String seat) async {
     try {
-      String seat = '2E3_2';
-
       final response = await _apiClient.dio.get(
         '$apiType${Apis.getEvacuationInfo}/$seat',
       );
