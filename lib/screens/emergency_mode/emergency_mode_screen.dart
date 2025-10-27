@@ -189,6 +189,8 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
 
   // 대피 정보 박스
   Widget _buildEvacuationInfoBox(EmergencyModeProvider provider) {
+    final info = provider.evacuationInfo;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -227,7 +229,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
             ),
           ),
           child: Text(
-            '최적 탈출구',
+            info?.optimalExit ?? '최적 탈출구',
             style: SafetyPassTextStyle.bodyEB50
                 .copyWith(color: SafetyPassColor.green),
             textAlign: TextAlign.center,
@@ -289,7 +291,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                         .copyWith(color: SafetyPassColor.white)),
                 const SizedBox(height: 5),
                 Text(
-                  info?.isEmergency == true ? info?.estimatedTime ?? '−' : '−',
+                  info?.estimatedTime ?? '-',
                   style: SafetyPassTextStyle.bodyEB30
                       .copyWith(color: SafetyPassColor.white),
                 ),

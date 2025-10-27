@@ -56,6 +56,11 @@ final class SafetyPassTextStyle {
     fontSize: 30,
   );
 
+  static const TextStyle bodyEB50 = TextStyle(
+    fontFamily: "PretendardExtraBold",
+    fontSize: 50,
+  );
+
   static const TextStyle bodyI = TextStyle(
     fontFamily: "Noto Serif Malayalam",
     fontSize: 15,
