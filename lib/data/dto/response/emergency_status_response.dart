@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'emergency_status_response.freezed.dart';
 part 'emergency_status_response.g.dart';
 
-///특정 코고 조회
+/// 긴급 상황 여부 확인
 @freezed
 class EmergencyStatusResponse with _$EmergencyStatusResponse {
   const factory EmergencyStatusResponse({
