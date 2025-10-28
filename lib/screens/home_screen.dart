@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                   QuickItem(icon: Icons.local_hospital, label: '보건실 찾기'),
                   QuickItem(icon: Icons.place, label: '입구 / 출구 찾기'),
                   QuickItem(icon: Icons.map, label: '3D 지도 보기'),
-                  QuickItem(icon: Icons.forum, label: '행사 장소 커뮤니티'),
+                  QuickItem(icon: Icons.forum, label: '행사 장소 \n커뮤니티'),
                 ],
               ),
             ],

@@ -50,7 +50,7 @@ class _TicketScanScreenState extends State<TicketScanScreen> {
       eventTitle: "[Play & Stay] 2025 ILLIT GLITTER DAY IN SEOUL+ Hotels",
       place: "올림픽공원 올림픽홀",
       date: "2025.06.12",
-      seat: "1B21_3",
+      seat: "2A1_4",
       zone: "I자형",
       owner: "장민영",
     );
