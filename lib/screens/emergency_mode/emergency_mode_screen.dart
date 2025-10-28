@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:safetypass_app/constants/colors.dart';
+import 'package:safetypass_app/screens/emergency_mode/emergency_mode_provider.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 import 'package:safetypass_app/widgets/atoms/texts/texts.dart';
 import 'package:safetypass_app/widgets/emergency_button.dart';
@@ -14,51 +16,57 @@ class EmergencyModeScreen extends StatefulWidget {
 
 class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
   bool is2DMode = true; // 2D/3D 토글
-  bool isSearching = false; // 탐색 중 상태
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: SafetyPassColor.systemGray05,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                // 상단 제목
-                EmergencyButton(
-                  text: '긴급 대피 모드',
-                  isOn: true,
-                  onTap: () {
-                    //TODO 모드 전환 라우팅
-                  },
+    return ChangeNotifierProvider(
+      create: (_) => EmergencyModeProvider(),
+      child: Scaffold(
+        backgroundColor: SafetyPassColor.systemGray05,
+        body: SafeArea(
+          child: Consumer<EmergencyModeProvider>(
+            builder: (context, provider, child) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      // 상단 제목
+                      EmergencyButton(
+                        text: '긴급 대피 모드',
+                        isOn: true,
+                        onTap: () {
+                          //TODO 모드 전환 라우팅
+                        },
+                      ),
+                      const SizedBox(height: 20),
+
+                      // 2D/3D 탭 버튼
+                      _build2D3DToggle(),
+                      const SizedBox(height: 20),
+
+                      // 좌석 맵
+                      _buildStadiumMapContainer(provider),
+                      const SizedBox(height: 20),
+
+                      // 최적 탈출구 탐색 버튼
+                      provider.isMonitoring
+                          ? _buildEvacuationInfoBox(provider)
+                          : _buildSearchButton(provider),
+                      const SizedBox(height: 20),
+
+                      // 내 좌석 & 예상 대피시간 정보
+                      _buildInfoBoxes(provider),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 20),
-
-                // 2D/3D 탭 버튼
-                _build2D3DToggle(),
-                const SizedBox(height: 20),
-
-                // 좌석 맵
-                _buildStadiumMapContainer(),
-                const SizedBox(height: 30),
-
-                // 최적 탈출구 탐색 버튼
-                _buildSearchButton(),
-                const SizedBox(height: 30),
-
-                // 내 좌석 & 예상 대피시간 정보
-                _buildInfoBoxes(),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
     );
   }
-
-  // 상단 제목
 
   // 2D/3D 토글 버튼
   Widget _build2D3DToggle() {
@@ -138,7 +146,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
   }
 
   // 경기장 맵 컨테이너
-  Widget _buildStadiumMapContainer() {
+  Widget _buildStadiumMapContainer(EmergencyModeProvider provider) {
     return Container(
       height: 270,
       decoration: BoxDecoration(
@@ -151,16 +159,21 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: const StadiumMapWidget(),
+        child: StadiumMapWidget(
+          evacuationPath: provider.evacuationPath, // 대피 경로 전달
+          closedExits:
+              provider.evacuationInfo?.closedExits ?? const [], // 폐쇠 출구 전달
+          fireLocation: provider.evacuationInfo?.fireLocation, // 화제 위치 전달
+        ),
       ),
     );
   }
 
   // 최적 탈출구 탐색 버튼
-  Widget _buildSearchButton() {
+  Widget _buildSearchButton(EmergencyModeProvider provider) {
     return GestureDetector(
       onTap: () {
-        // 여기에 버튼 클릭 시 동작 추가
+        provider.toggleMonitoring();
       },
       child: Container(
         width: double.infinity,
@@ -173,13 +186,68 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
         child: const Text(
           '최적 탈출구 탐색',
           style: SafetyPassTextStyle.bodyEB30,
+          textAlign: TextAlign.center,
         ),
       ),
     );
   }
 
+  // 대피 정보 박스
+  Widget _buildEvacuationInfoBox(EmergencyModeProvider provider) {
+    final info = provider.evacuationInfo;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 최적 탈출구 알림 박스
+        Container(
+          width: 350,
+          height: 40,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: SafetyPassColor.green,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            '최적 탈출구',
+            style: SafetyPassTextStyle.bodyEB17
+                .copyWith(color: SafetyPassColor.systemGray05),
+            textAlign: TextAlign.center,
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // 탈출구
+        Container(
+          width: 350,
+          height: 90,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: SafetyPassColor.systemGray05,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: SafetyPassColor.white,
+              width: 1,
+            ),
+          ),
+          child: Text(
+            info?.optimalExit ?? '최적 탈출구',
+            style: SafetyPassTextStyle.bodyEB50
+                .copyWith(color: SafetyPassColor.green),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+
   // 내 좌석 & 예상 대피시간 정보 박스
-  Widget _buildInfoBoxes() {
+  Widget _buildInfoBoxes(EmergencyModeProvider provider) {
+    final info = provider.evacuationInfo;
+
     return Row(
       children: [
         // 내 좌석
@@ -200,7 +268,7 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                     style: SafetyPassTextStyle.bodyEB17
                         .copyWith(color: SafetyPassColor.white)),
                 const SizedBox(height: 5),
-                Text('2E1_4',
+                Text(provider.seat,
                     style: SafetyPassTextStyle.bodyEB30
                         .copyWith(color: SafetyPassColor.white)),
               ],
@@ -227,9 +295,11 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                     style: SafetyPassTextStyle.bodyEB17
                         .copyWith(color: SafetyPassColor.white)),
                 const SizedBox(height: 5),
-                Text('−',
-                    style: SafetyPassTextStyle.bodyEB30
-                        .copyWith(color: SafetyPassColor.white)),
+                Text(
+                  info?.estimatedTime ?? '-',
+                  style: SafetyPassTextStyle.bodyEB30
+                      .copyWith(color: SafetyPassColor.white),
+                ),
               ],
             ),
           ),

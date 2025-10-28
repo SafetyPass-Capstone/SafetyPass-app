@@ -12,6 +12,10 @@ class StadiumMapPainter extends CustomPainter {
   final List<LayerPolygon> stages;
   final List<AisleNode> aisleNodes;
   final List<EdgeConnection> edges;
+  final List<String> evacuationPath;
+  final Map<String, Offset> nodeCoordinates;
+  final List<String> closedExits;
+  final Offset? fireLocation;
 
   StadiumMapPainter({
     required this.seats,
@@ -20,6 +24,10 @@ class StadiumMapPainter extends CustomPainter {
     required this.stages,
     required this.aisleNodes,
     required this.edges,
+    this.evacuationPath = const [],
+    this.nodeCoordinates = const {},
+    this.closedExits = const [],
+    this.fireLocation,
   });
 
   @override
@@ -29,7 +37,6 @@ class StadiumMapPainter extends CustomPainter {
       return;
     }
 
-    // 좌표 변환을 위한 범위 계산
     final bounds = _calculateBounds();
     final transform = _createTransformFunction(bounds, size);
 
@@ -39,7 +46,147 @@ class StadiumMapPainter extends CustomPainter {
     _drawSeats(canvas, transform);
     _drawEdges(canvas, transform);
     _drawAisleNodes(canvas, transform);
+
+    // 대피 경로 그리기 (추가) - exits 전에
+    if (evacuationPath.isNotEmpty) {
+      _drawEvacuationPath(canvas, transform);
+    }
+    // 화재 위치 마킹
+    if (fireLocation != null) {
+      _drawFireLocation(canvas, transform);
+    }
+
     _drawExits(canvas, transform);
+  }
+
+  // 대피 경로 그리기
+  void _drawEvacuationPath(
+      Canvas canvas, Offset Function(double, double) transform) {
+    if (evacuationPath.length < 2) return;
+
+    // 경로 선
+    final pathPaint = Paint()
+      ..color = const Color(0xFF5AFF98) // 초록색
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    // 경로 글로우 효과
+    final glowPaint = Paint()
+      ..color = const Color(0x8051EC8B)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 6.0
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+    final path = Path();
+    bool firstPoint = true;
+
+    for (var nodeId in evacuationPath) {
+      final coords = nodeCoordinates[nodeId];
+      if (coords != null) {
+        final point = transform(coords.dx, coords.dy);
+
+        if (firstPoint) {
+          path.moveTo(point.dx, point.dy);
+          firstPoint = false;
+        } else {
+          path.lineTo(point.dx, point.dy);
+        }
+      }
+    }
+
+    // 경로 선 그리기
+    canvas.drawPath(path, pathPaint);
+
+    // 경로 노드 강조
+    _drawPathNodes(canvas, transform);
+  }
+
+  // 화제 위치
+  void _drawFireLocation(
+      Canvas canvas, Offset Function(double, double) transform) {
+    // X자 그리기용 페인트
+    final linePaint = Paint()
+      ..color = const Color(0xFFFF4D4D)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3.0
+      ..strokeCap = StrokeCap.round;
+
+    // 글로우(
+    final glowPaint = Paint()
+      ..color = const Color(0x66FF4D4D)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8.0
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+    // 화면 스케일과 무관한 고정 길이(픽셀 기준)
+    const half = 5.0;
+
+    final world = fireLocation!;
+    final p = transform(world.dx, world.dy);
+
+    // 글로우
+    canvas.drawLine(Offset(p.dx - half, p.dy - half),
+        Offset(p.dx + half, p.dy + half), glowPaint);
+    canvas.drawLine(Offset(p.dx - half, p.dy + half),
+        Offset(p.dx + half, p.dy - half), glowPaint);
+
+    // 실제 X 선
+    canvas.drawLine(Offset(p.dx - half, p.dy - half),
+        Offset(p.dx + half, p.dy + half), linePaint);
+    canvas.drawLine(Offset(p.dx - half, p.dy + half),
+        Offset(p.dx + half, p.dy - half), linePaint);
+  }
+
+  // 경로 노드 강조
+  void _drawPathNodes(
+      Canvas canvas, Offset Function(double, double) transform) {
+    final nodePaint = Paint()
+      ..color = const Color(0xFF51EC8B)
+      ..style = PaintingStyle.fill;
+
+    final nodeOutlinePaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+    // 시작점 (현재 좌석)
+    if (evacuationPath.isNotEmpty) {
+      final startId = evacuationPath.first;
+      final startCoords = nodeCoordinates[startId];
+      if (startCoords != null) {
+        final point = transform(startCoords.dx, startCoords.dy);
+
+        // 원형 글로우
+        _drawCircleGlow(canvas, point, 12);
+
+        // 시작점 심볼
+        canvas.drawCircle(point, 4, Paint()..color = const Color(0xFF38CC69));
+        canvas.drawCircle(point, 4, nodeOutlinePaint);
+      }
+    }
+
+    // 끝점 (출구)
+    if (evacuationPath.length > 1) {
+      final endId = evacuationPath.last;
+      final endCoords = nodeCoordinates[endId];
+      if (endCoords != null) {
+        final point = transform(endCoords.dx, endCoords.dy);
+        canvas.drawCircle(point, 6, nodePaint);
+        canvas.drawCircle(point, 6, nodeOutlinePaint);
+      }
+    }
+
+    // 중간 노드들 (작게)
+    for (int i = 1; i < evacuationPath.length - 1; i++) {
+      final nodeId = evacuationPath[i];
+      final coords = nodeCoordinates[nodeId];
+      if (coords != null) {
+        final point = transform(coords.dx, coords.dy);
+        canvas.drawCircle(point, 1, nodePaint);
+      }
+    }
   }
 
   MapBounds _calculateBounds() {
@@ -209,13 +356,14 @@ class StadiumMapPainter extends CustomPainter {
 
     for (var exit in exits) {
       final point = transform(exit.x, exit.y);
+      final isClosed = closedExits.contains(exit.nodeId);
 
-      // 글로우 효과
-      _drawGlow(canvas, point);
+      // 글로우
+      _drawExitGlow(canvas, point, isClosed);
 
-      // 배경
+      // 배경 색상
       final bgPaint = Paint()
-        ..color = const Color(0xFFD6FFE0)
+        ..color = isClosed ? const Color(0xFFFF0000) : const Color(0xFFD6FFE0)
         ..style = PaintingStyle.fill;
 
       final rect = RRect.fromRectAndRadius(
@@ -229,19 +377,61 @@ class StadiumMapPainter extends CustomPainter {
       final textPainter = TextPainter(
         text: TextSpan(
           text: exit.nodeId.toUpperCase(),
-          style: SafetyPassTextStyle.bodyEB10
-              .copyWith(color: SafetyPassColor.systemGray05),
+          style: SafetyPassTextStyle.bodyEB10.copyWith(
+            color: SafetyPassColor.systemGray05,
+          ),
         ),
         textDirection: TextDirection.ltr,
       );
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset(
-          point.dx - textPainter.width / 2,
-          point.dy - textPainter.height / 2,
-        ),
+        Offset(point.dx - textPainter.width / 2,
+            point.dy - textPainter.height / 2),
       );
+    }
+  }
+
+// 출구용 글로우(상태별)
+  void _drawExitGlow(Canvas canvas, Offset point, bool isClosed) {
+    final rect = RRect.fromRectAndRadius(
+      Rect.fromCenter(center: point, width: 50, height: 15),
+      const Radius.circular(8),
+    );
+
+    // 폐쇄: 레드 글로우 / 정상: 기존 그린 글로우
+    final paints = isClosed
+        ? [
+            Paint()
+              ..color = const Color(0x4DFF3A3A)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x66FF3A3A)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x99FF3A3A)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
+              ..style = PaintingStyle.fill,
+          ]
+        : [
+            Paint()
+              ..color = const Color(0x4D3AF766)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x663AF766)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
+              ..style = PaintingStyle.fill,
+            Paint()
+              ..color = const Color(0x993AF766)
+              ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
+              ..style = PaintingStyle.fill,
+          ];
+
+    for (var paint in paints) {
+      canvas.drawRRect(rect, paint);
     }
   }
 
@@ -284,6 +474,27 @@ class StadiumMapPainter extends CustomPainter {
         center.dy - textPainter.height / 2,
       ),
     );
+  }
+
+  void _drawCircleGlow(Canvas canvas, Offset center, double radius) {
+    final paints = [
+      Paint()
+        ..color = const Color(0x333AF766) // 바깥쪽 옅은
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18)
+        ..style = PaintingStyle.fill,
+      Paint()
+        ..color = const Color(0x4D3AF766)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12)
+        ..style = PaintingStyle.fill,
+      Paint()
+        ..color = const Color(0x663AF766) // 안쪽 진한
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6)
+        ..style = PaintingStyle.fill,
+    ];
+
+    for (var p in paints) {
+      canvas.drawCircle(center, radius, p);
+    }
   }
 
   void _drawGlow(Canvas canvas, Offset point) {
@@ -334,7 +545,11 @@ class StadiumMapPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant StadiumMapPainter oldDelegate) {
+    return evacuationPath != oldDelegate.evacuationPath ||
+        closedExits != oldDelegate.closedExits ||
+        fireLocation != oldDelegate.fireLocation;
+  }
 }
 
 class MapBounds {

@@ -8,7 +8,16 @@ import 'package:safetypass_app/widgets/organisms/stadium_map_painter.dart';
 import 'package:safetypass_app/models/stadium_map_models.dart';
 
 class StadiumMapWidget extends StatefulWidget {
-  const StadiumMapWidget({Key? key}) : super(key: key);
+  final List<String> evacuationPath;
+  final List<String> closedExits;
+  final String? fireLocation;
+
+  const StadiumMapWidget({
+    Key? key,
+    this.evacuationPath = const [],
+    this.closedExits = const [],
+    this.fireLocation,
+  }) : super(key: key);
 
   @override
   State<StadiumMapWidget> createState() => _StadiumMapWidgetState();
@@ -23,11 +32,12 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
   List<AisleNode> aisleNodes = [];
   List<EdgeConnection> edges = [];
 
-  // 상태
+  // 좌표 매핑 - nodeId -> (x, y)
+  Map<String, Offset> nodeCoordinates = {};
+
   bool isLoading = true;
   String? errorMessage;
 
-  // 컨트롤러
   final TransformationController _transformationController =
       TransformationController();
 
@@ -50,6 +60,31 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
       _loadAisleNodesData(),
       _loadEdgesData(),
     ]);
+
+    // 좌표 매핑 생성
+    _buildNodeCoordinateMap();
+  }
+
+  // 좌표 매핑 생성 (추가)
+  void _buildNodeCoordinateMap() {
+    nodeCoordinates.clear();
+
+    // Seats 추가
+    for (var seat in seats) {
+      nodeCoordinates[seat.node] = Offset(seat.x, seat.y);
+    }
+
+    // Exits 추가
+    for (var exit in exits) {
+      nodeCoordinates[exit.nodeId] = Offset(exit.x, exit.y);
+    }
+
+    // AisleNodes 추가
+    for (var node in aisleNodes) {
+      nodeCoordinates[node.id] = Offset(node.x, node.y);
+    }
+
+    print('✓ Mapped ${nodeCoordinates.length} node coordinates');
   }
 
   Future<void> _loadAisleNodesData() async {
@@ -219,6 +254,11 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
       );
     }
 
+    Offset? fireOffset;
+    if (widget.fireLocation != null) {
+      fireOffset = nodeCoordinates[widget.fireLocation!]; // ← 노드ID를 좌표로
+    }
+
     return InteractiveViewer(
       transformationController: _transformationController,
       boundaryMargin: const EdgeInsets.all(100),
@@ -239,6 +279,10 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
             stages: stages,
             aisleNodes: aisleNodes,
             edges: edges,
+            evacuationPath: widget.evacuationPath,
+            nodeCoordinates: nodeCoordinates,
+            closedExits: widget.closedExits,
+            fireLocation: fireOffset,
           ),
         ),
       ),
