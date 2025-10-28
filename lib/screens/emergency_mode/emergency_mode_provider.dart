@@ -9,7 +9,7 @@ class EmergencyModeProvider extends ChangeNotifier {
       FrontedEmergencyService();
 
   // 상태 변수들
-  String seat = '2E3_2';
+  String seat = '1B21_3';
   EvacuationInfoResponse? evacuationInfo;
   bool isLoading = false;
   String? errorMessage;
