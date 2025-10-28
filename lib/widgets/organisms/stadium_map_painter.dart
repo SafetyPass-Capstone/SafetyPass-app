@@ -51,12 +51,13 @@ class StadiumMapPainter extends CustomPainter {
     if (evacuationPath.isNotEmpty) {
       _drawEvacuationPath(canvas, transform);
     }
-    // 화재 위치 마킹
+
+    _drawExits(canvas, transform);
+
+    // 화재 위치 마킹 - 모든 요소보다 앞에 그리기
     if (fireLocation != null) {
       _drawFireLocation(canvas, transform);
     }
-
-    _drawExits(canvas, transform);
   }
 
   // 대피 경로 그리기
