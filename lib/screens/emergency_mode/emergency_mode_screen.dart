@@ -37,6 +37,9 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                         text: '긴급 대피 모드',
                         isOn: true,
                         onTap: () {
+                          Provider.of<EmergencyModeProvider>(context,
+                                  listen: false)
+                              .dispose();
                           context.pop();
                         },
                       ),

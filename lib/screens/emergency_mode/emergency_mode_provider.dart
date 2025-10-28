@@ -29,6 +29,8 @@ class EmergencyModeProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _monitoringTimer?.cancel(); // Timer 중지
+    _streamSubscription?.cancel(); // Stream 구독 중지
     super.dispose();
   }
 
