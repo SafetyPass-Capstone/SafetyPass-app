@@ -9,7 +9,7 @@ class EmergencyModeProvider extends ChangeNotifier {
       FrontedEmergencyService();
 
   // 상태 변수들
-  String seat = '2E3_2';
+  String seat = '2A1_4';
   EvacuationInfoResponse? evacuationInfo;
   bool isLoading = false;
   String? errorMessage;
@@ -29,6 +29,8 @@ class EmergencyModeProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    _monitoringTimer?.cancel(); // Timer 중지
+    _streamSubscription?.cancel(); // Stream 구독 중지
     super.dispose();
   }
 

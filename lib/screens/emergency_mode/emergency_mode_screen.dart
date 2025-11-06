@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:safetypass_app/constants/colors.dart';
 import 'package:safetypass_app/screens/emergency_mode/emergency_mode_provider.dart';
@@ -36,7 +37,10 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
                         text: '긴급 대피 모드',
                         isOn: true,
                         onTap: () {
-                          //TODO 모드 전환 라우팅
+                          Provider.of<EmergencyModeProvider>(context,
+                                  listen: false)
+                              .dispose();
+                          context.pop();
                         },
                       ),
                       const SizedBox(height: 20),
