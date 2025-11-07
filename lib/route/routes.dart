@@ -9,6 +9,8 @@ import 'package:safetypass_app/screens/ticket_register/register_screen.dart';
 import 'package:safetypass_app/screens/ticket_register/ticket_scan_screen.dart';
 import 'package:safetypass_app/screens/ticket_register/ticket_checking_screen.dart';
 import 'package:safetypass_app/screens/ticket_register/ticket_preview_screen.dart';
+import 'package:safetypass_app/screens/ticket_register/venue_complete_screen.dart';
+import 'package:safetypass_app/screens/ticket_register/ticket_input_screen.dart';
 import 'package:safetypass_app/screens/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -38,6 +40,14 @@ final GoRouter appRouter = GoRouter(
       path: Paths.ticketPreview,
       builder: (context, state) =>
           TicketPreviewScreen(showSubmit: (state.extra as bool?) ?? true),
+    ),
+    GoRoute(
+      path: Paths.venueComplete,
+      builder: (context, state) => const VenueCompleteScreen(),
+    ),
+    GoRoute(
+      path: Paths.ticketInput,
+      builder: (context, state) => const TicketInputScreen(),
     ),
     GoRoute(path: Paths.home, builder: (context, state) => const HomeScreen()),
     GoRoute(

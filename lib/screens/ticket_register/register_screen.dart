@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 import 'package:safetypass_app/constants/paths.dart';
+import 'package:safetypass_app/constants/colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,88 +13,155 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _searchCtrl = TextEditingController();
+  bool _isVenueSelected = false;
+  String _selectedVenueName = '';
+  String _selectedVenueCapacity = '';
+  List<Map<String, String>> _filteredVenues = [];
 
-  // 임시 최근 검색 데이터
-  static const String recentVenueName = '서울숲 공연홀';
-  static const String recentVenueCapacity = '2500';
+  // 임시 행사장 데이터
+  final List<Map<String, String>> _allVenues = [
+    {'name': '올림픽공원 올림픽홀', 'capacity': '3000'},
+    {'name': '서울 잠실 실내체육관', 'capacity': '15000'},
+    {'name': '고척 스카이돔', 'capacity': '18000'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredVenues = _allVenues;
+  }
+
+  void _filterVenues(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredVenues = _allVenues;
+      } else {
+        _filteredVenues = _allVenues
+            .where((venue) =>
+                venue['name']!.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: SafeArea(
-        child: ListView(
+        child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8, top: 8, bottom: 4),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  onPressed: () => context.pop(),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: ListView(
                 children: [
-                  Text(
-                    '행사장 등록',
-                    style: SafetyPassTextStyle.titleSB24,
-                  ),
-                  const SizedBox(height: 8),
-
-                  Text(
-                    '행사장을 검색하시거나 티켓을 스캔하세요',
-                    style: SafetyPassTextStyle.bodyR15,
-                  ),
-                  const SizedBox(height: 12),
-
-                  // QR 스캔 화면으로 이동
-                  _QrScanCard(onTap: () => context.push(Paths.scan)),
-                  const SizedBox(height: 50),
-
-                  TextField(
-                    controller: _searchCtrl,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search, color: Colors.white),
-                      hintText: '행사장 장소 검색',
-                      hintStyle: const TextStyle(color: Colors.white),
-                      filled: true,
-                      fillColor: const Color(0xFF120E50),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, top: 8, bottom: 4),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                        onPressed: () => context.pop(),
                       ),
                     ),
-                    style: const TextStyle(color: Colors.white),
-                    onChanged: (_) {},
                   ),
-                  const SizedBox(height: 18),
-
-                  Text(
-                    '최근 검색',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.black54),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '행사장 등록',
+                          style: SafetyPassTextStyle.titleSB24,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '행사장을 검색하시거나 티켓을 스캔하세요',
+                          style: SafetyPassTextStyle.bodyR15,
+                        ),
+                        const SizedBox(height: 12),
+                        // QR 스캔 화면으로 이동
+                        _QrScanCard(onTap: () => context.push(Paths.scan)),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: Text(
+                            '또는',
+                            style: SafetyPassTextStyle.bodyR15,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: _searchCtrl,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search, color: Colors.white),
+                            hintText: '행사장 장소 검색',
+                            hintStyle: const TextStyle(color: Colors.white),
+                            filled: true,
+                            fillColor: SafetyPassColor.darkBlueAlt,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          style: const TextStyle(color: Colors.white),
+                          onChanged: _filterVenues,
+                        ),
+                        const SizedBox(height: 18),
+                        Text(
+                          '최근 검색',
+                          style: SafetyPassTextStyle.bodyR12.copyWith(color: Colors.black54),
+                        ),
+                        const SizedBox(height: 8),
+                        // 검색 결과 리스트
+                        ..._filteredVenues.map((venue) => _VenueItem(
+                              name: venue['name']!,
+                              capacity: venue['capacity']!,
+                              isSelected: _isVenueSelected &&
+                                  _selectedVenueName == venue['name'],
+                              onTap: () {
+                                setState(() {
+                                  if (_selectedVenueName == venue['name']) {
+                                    _isVenueSelected = false;
+                                    _selectedVenueName = '';
+                                    _selectedVenueCapacity = '';
+                                  } else {
+                                    _isVenueSelected = true;
+                                    _selectedVenueName = venue['name']!;
+                                    _selectedVenueCapacity = venue['capacity']!;
+                                  }
+                                });
+                              },
+                            )),
+                        const SizedBox(height: 24),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 8),
-
-                  _VenueItem(
-                    name: recentVenueName,
-                    capacity: recentVenueCapacity,
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 24),
                 ],
               ),
             ),
+            if (_isVenueSelected)
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () => context.push(Paths.venueComplete),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: SafetyPassColor.darkBlue,
+                      foregroundColor: SafetyPassColor.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      textStyle: SafetyPassTextStyle.bodySB20,
+                    ),
+                    child: const Text('다음'),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -106,11 +174,13 @@ class _VenueItem extends StatelessWidget {
     required this.name,
     required this.capacity,
     required this.onTap,
+    this.isSelected = false,
   });
 
   final String name;
   final String capacity;
   final VoidCallback onTap;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -118,13 +188,16 @@ class _VenueItem extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0x22000000)),
+            color: isSelected ? SafetyPassColor.systemSkyblue : Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: isSelected ? SafetyPassColor.darkBlueAlt : const Color(0x22000000),
+              width: 1,
+            ),
           ),
           child: Row(
             children: [
@@ -167,7 +240,7 @@ class _QrScanCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.photo_camera_outlined, size: 32, color: Color(0xFF120E50)),
+            const Icon(Icons.photo_camera_outlined, size: 32, color: SafetyPassColor.darkBlue),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
