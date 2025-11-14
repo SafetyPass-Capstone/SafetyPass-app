@@ -63,6 +63,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onTap: () {
                           if (context.canPop()) {
                             context.pop();
+                          } else {
+                            context.go(Paths.landing);
                           }
                         },
                         child: const Icon(Icons.arrow_back_ios_new_rounded, size: 28),
