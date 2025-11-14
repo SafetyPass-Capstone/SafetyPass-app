@@ -94,30 +94,33 @@ class _TicketInputScreenState extends State<TicketInputScreen> {
           children: [
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.zero,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0, top: 8, bottom: 4),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                        onPressed: () => context.pop(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 8, bottom: 4),
+                      child: GestureDetector(
+                        onTap: () => context.pop(),
+                        child: const Icon(Icons.arrow_back_ios_new_rounded, size: 28),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    '티켓(좌석) 정보 입력',
-                    style: SafetyPassTextStyle.titleSB24.copyWith(
-                      color: SafetyPassColor.darkBlueAlt,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      '티켓(좌석) 정보 입력',
+                      style: SafetyPassTextStyle.titleSB24.copyWith(
+                        color: SafetyPassColor.darkBlueAlt,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   // 올림픽공원 올림픽홀 표시
-                  Container(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
@@ -138,38 +141,71 @@ class _TicketInputScreenState extends State<TicketInputScreen> {
                       ),
                     ),
                   ),
+                  ),
                   const SizedBox(height: 24),
                   // 행사명 입력
-                  _buildLabelWithRequired('행사명'),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                    controller: _eventNameCtrl,
-                    suffixText: '검색',
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabelWithRequired('행사명'),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _eventNameCtrl,
+                          suffixText: '검색',
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                   // 날짜 입력
-                  _buildLabelWithRequired('날짜'),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                    controller: _dateCtrl,
-                    hintText: '연도.월.일.',
-                    suffixIcon: Icons.calendar_month,
-                    readOnly: true,
-                    onTap: _selectDate,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabelWithRequired('날짜'),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _dateCtrl,
+                          hintText: '연도.월.일.',
+                          suffixIcon: Icons.calendar_month,
+                          readOnly: true,
+                          onTap: _selectDate,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                   // 예매자명 입력
-                  _buildLabelWithRequired('예매자명'),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                    controller: _bookerNameCtrl,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabelWithRequired('예매자명'),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _bookerNameCtrl,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                   // 좌석 정보 입력
-                  _buildLabelWithRequired('좌석 정보'),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                    controller: _seatCtrl,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabelWithRequired('좌석 정보'),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _seatCtrl,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 24),
                 ],

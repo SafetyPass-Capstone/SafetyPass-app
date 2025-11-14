@@ -53,92 +53,101 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Expanded(
               child: ListView(
+                padding: EdgeInsets.zero,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 8, bottom: 4),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                        onPressed: () => context.pop(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 8, bottom: 4),
+                      child: GestureDetector(
+                        onTap: () => context.pop(),
+                        child: const Icon(Icons.arrow_back_ios_new_rounded, size: 28),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '행사장 등록',
-                          style: SafetyPassTextStyle.titleSB24,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '행사장을 검색하시거나 티켓을 스캔하세요',
-                          style: SafetyPassTextStyle.bodyR15,
-                        ),
-                        const SizedBox(height: 12),
-                        // QR 스캔 화면으로 이동
-                        _QrScanCard(onTap: () => context.push(Paths.scan)),
-                        const SizedBox(height: 20),
-                        Center(
-                          child: Text(
-                            '또는',
-                            style: SafetyPassTextStyle.bodyR15,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: _searchCtrl,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search, color: Colors.white),
-                            hintText: '행사장 장소 검색',
-                            hintStyle: const TextStyle(color: Colors.white),
-                            filled: true,
-                            fillColor: SafetyPassColor.darkBlueAlt,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          style: const TextStyle(color: Colors.white),
-                          onChanged: _filterVenues,
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          '최근 검색',
-                          style: SafetyPassTextStyle.bodyR12.copyWith(color: Colors.black54),
-                        ),
-                        const SizedBox(height: 8),
-                        // 검색 결과 리스트
-                        ..._filteredVenues.map((venue) => _VenueItem(
-                              name: venue['name']!,
-                              capacity: venue['capacity']!,
-                              isSelected: _isVenueSelected &&
-                                  _selectedVenueName == venue['name'],
-                              onTap: () {
-                                setState(() {
-                                  if (_selectedVenueName == venue['name']) {
-                                    _isVenueSelected = false;
-                                    _selectedVenueName = '';
-                                    _selectedVenueCapacity = '';
-                                  } else {
-                                    _isVenueSelected = true;
-                                    _selectedVenueName = venue['name']!;
-                                    _selectedVenueCapacity = venue['capacity']!;
-                                  }
-                                });
-                              },
-                            )),
-                        const SizedBox(height: 24),
-                      ],
+                    child: Text(
+                      '행사장 등록',
+                      style: SafetyPassTextStyle.titleSB24,
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      '행사장을 검색하시거나 티켓을 스캔하세요',
+                      style: SafetyPassTextStyle.bodyR15,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // QR 스캔 화면으로 이동
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: _QrScanCard(onTap: () => context.push(Paths.scan)),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      '또는',
+                      style: SafetyPassTextStyle.bodyR15,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                    controller: _searchCtrl,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search, color: Colors.white),
+                      hintText: '행사장 장소 검색',
+                      hintStyle: const TextStyle(color: Colors.white),
+                      filled: true,
+                      fillColor: SafetyPassColor.darkBlueAlt,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                      style: const TextStyle(color: Colors.white),
+                      onChanged: _filterVenues,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      '최근 검색',
+                      style: SafetyPassTextStyle.bodyR12.copyWith(color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // 검색 결과 리스트
+                  ..._filteredVenues.map((venue) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: _VenueItem(
+                        name: venue['name']!,
+                        capacity: venue['capacity']!,
+                        isSelected: _isVenueSelected &&
+                            _selectedVenueName == venue['name'],
+                        onTap: () {
+                          setState(() {
+                            if (_selectedVenueName == venue['name']) {
+                              _isVenueSelected = false;
+                              _selectedVenueName = '';
+                              _selectedVenueCapacity = '';
+                            } else {
+                              _isVenueSelected = true;
+                              _selectedVenueName = venue['name']!;
+                              _selectedVenueCapacity = venue['capacity']!;
+                            }
+                          });
+                        },
+                      ),
+                  )),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),

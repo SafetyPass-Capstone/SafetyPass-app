@@ -16,37 +16,41 @@ class VenueCompleteScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.zero,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0, top: 8, bottom: 4),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                        onPressed: () => context.pop(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 8, bottom: 4),
+                      child: GestureDetector(
+                        onTap: () => context.pop(),
+                        child: const Icon(Icons.arrow_back_ios_new_rounded, size: 28),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    '행사장 등록 완료',
-                    style: SafetyPassTextStyle.titleSB24.copyWith(
-                      color: SafetyPassColor.darkBlueAlt,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      '행사장 등록 완료',
+                      style: SafetyPassTextStyle.titleSB24.copyWith(
+                        color: SafetyPassColor.darkBlueAlt,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '안전을 위해서 티켓(좌석)을 등록해주세요',
-                    style: SafetyPassTextStyle.bodyR15.copyWith(
-                      color: SafetyPassColor.darkBlueAlt,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      '안전을 위해서 티켓(좌석)을 등록해주세요',
+                      style: SafetyPassTextStyle.bodyR15.copyWith(
+                        color: SafetyPassColor.darkBlueAlt,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Column(
                       children: [
                         Center(
