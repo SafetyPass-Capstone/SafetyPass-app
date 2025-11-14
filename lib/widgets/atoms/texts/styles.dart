@@ -46,6 +46,16 @@ final class SafetyPassTextStyle {
     fontSize: 12,
   );
 
+  static const TextStyle bodyEB12 = TextStyle(
+    fontFamily: "PretendardExtraBold",
+    fontSize: 12,
+  );
+
+  static const TextStyle bodyEB14 = TextStyle(
+    fontFamily: "PretendardExtraBold",
+    fontSize: 14,
+  );
+
   static const TextStyle bodyEB10 = TextStyle(
     fontFamily: "PretendardExtraBold",
     fontSize: 10,

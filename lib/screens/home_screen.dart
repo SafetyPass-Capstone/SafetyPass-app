@@ -24,39 +24,33 @@ class HomeScreen extends StatelessWidget {
         context.watch<EventStore>().venue?.capacity?.toString() ?? '3000';
     final venueName = t?.place ?? '올림픽 공원 올림픽홀';
 
-    return WillPopScope(
-      onWillPop: () async {
-        context.go(Paths.register);
-        return false;
-      },
-      child: Scaffold(
-        backgroundColor: SafetyPassColor.white,
-        body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 50, 20, 24),
-            children: [
-              _buildInfoText(context),
-              const SizedBox(height: 10),
-              _buildEmergencyButton(context),
-              const SizedBox(height: 30),
-              CapacityCard(
-                name: name,
-                capacity: capacity,
-                venue: venueName,
-              ),
-              const SizedBox(height: 10),
-              _buildMyTicketButton(context),
-              const SizedBox(height: 10),
-              const QuickGrid(
-                items: [
-                  QuickItem(icon: Icons.local_hospital, label: '보건실 찾기'),
-                  QuickItem(icon: Icons.place, label: '입구 / 출구 찾기'),
-                  QuickItem(icon: Icons.map, label: '3D 지도 보기'),
-                  QuickItem(icon: Icons.forum, label: '행사 장소 \n커뮤니티'),
-                ],
-              ),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: SafetyPassColor.white,
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 50, 20, 24),
+          children: [
+            _buildInfoText(context),
+            const SizedBox(height: 10),
+            _buildEmergencyButton(context),
+            const SizedBox(height: 30),
+            CapacityCard(
+              name: name,
+              capacity: capacity,
+              venue: venueName,
+            ),
+            const SizedBox(height: 10),
+            _buildMyTicketButton(context),
+            const SizedBox(height: 10),
+            const QuickGrid(
+              items: [
+                QuickItem(icon: Icons.local_hospital, label: '보건실 찾기'),
+                QuickItem(icon: Icons.place, label: '입구 / 출구 찾기'),
+                QuickItem(icon: Icons.map, label: '3D 지도 보기'),
+                QuickItem(icon: Icons.forum, label: '행사 장소 \n커뮤니티'),
+              ],
+            ),
+          ],
         ),
       ),
     );

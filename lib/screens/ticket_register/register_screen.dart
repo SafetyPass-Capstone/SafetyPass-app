@@ -60,7 +60,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 10, top: 8, bottom: 4),
                       child: GestureDetector(
-                        onTap: () => context.pop(),
+                        onTap: () {
+                          if (context.canPop()) {
+                            context.pop();
+                          }
+                        },
                         child: const Icon(Icons.arrow_back_ios_new_rounded, size: 28),
                       ),
                     ),

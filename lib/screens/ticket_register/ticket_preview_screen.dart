@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:safetypass_app/stores/event_store.dart';
 import 'package:safetypass_app/widgets/atoms/texts/styles.dart';
 import 'package:safetypass_app/constants/colors.dart';
+import 'package:safetypass_app/constants/paths.dart';
 
 class TicketPreviewScreen extends StatelessWidget {
   const TicketPreviewScreen({
@@ -79,6 +80,40 @@ class TicketPreviewScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+            if (!showSubmit)
+              Center(
+                child: GestureDetector(
+                  onTap: () => context.go(Paths.register),
+                  child: Container(
+                    width: 140,
+                    height: 42,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFB6B6B6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.refresh,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          '티켓 재등록',
+                          style: SafetyPassTextStyle.bodyEB14.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -89,7 +124,7 @@ class TicketPreviewScreen extends StatelessWidget {
           height: 56,
           width: double.infinity,
           child: FilledButton(
-            onPressed: () => context.go('/home'),
+            onPressed: () => context.go(Paths.home),
             style: FilledButton.styleFrom(
               backgroundColor: const Color(0xFF1A0A49),
               foregroundColor: Colors.white,
