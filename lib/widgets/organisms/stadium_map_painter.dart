@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -16,6 +17,7 @@ class StadiumMapPainter extends CustomPainter {
   final Map<String, Offset> nodeCoordinates;
   final List<String> closedExits;
   final Offset? fireLocation;
+  final List<Offset> fireSpreadNodes;
 
   StadiumMapPainter({
     required this.seats,
@@ -28,6 +30,7 @@ class StadiumMapPainter extends CustomPainter {
     this.nodeCoordinates = const {},
     this.closedExits = const [],
     this.fireLocation,
+    this.fireSpreadNodes = const [],
   });
 
   @override
@@ -54,9 +57,37 @@ class StadiumMapPainter extends CustomPainter {
 
     _drawExits(canvas, transform);
 
+    if (fireSpreadNodes.isNotEmpty) {
+      _drawFireSpreadNodes(canvas, transform);
+    }
+
     // 화재 위치 마킹 - 모든 요소보다 앞에 그리기
     if (fireLocation != null) {
       _drawFireLocation(canvas, transform);
+    }
+  }
+
+  void _drawFireSpreadNodes(
+      Canvas canvas, Offset Function(double, double) transform) {
+    if (fireSpreadNodes.isEmpty) return;
+
+    final spreadPaint = Paint()
+      ..color = const Color(0xFFFF4D4D)
+      ..style = PaintingStyle.fill;
+
+    final glowPaint = Paint()
+      ..color = const Color(0x99FF4D4D) // 더 진한 글로우
+      ..style = PaintingStyle.fill
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
+
+    for (var spreadNode in fireSpreadNodes) {
+      final point = transform(spreadNode.dx, spreadNode.dy);
+
+      // 큰 글로우 효과 (반경 6.0)
+      canvas.drawCircle(point, 6.0, glowPaint);
+
+      // 실제 원 (반경 4.5)
+      canvas.drawCircle(point, 4.5, spreadPaint);
     }
   }
 
@@ -114,12 +145,24 @@ class StadiumMapPainter extends CustomPainter {
       ..strokeWidth = 3.0
       ..strokeCap = StrokeCap.round;
 
-    // 글로우(
+    // x자 흰색 테두리
+    final whiteOutlinePaint = Paint()
+      ..color = const Color(0xFFFFFFFF)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 5.5
+      ..strokeCap = StrokeCap.round;
+
+    // 글로우
     final glowPaint = Paint()
       ..color = const Color(0x66FF4D4D)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8.0
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+    final whiteBorderPaint = Paint()
+      ..color = const Color(0xFFFFFFFF)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
 
     // 화면 스케일과 무관한 고정 길이(픽셀 기준)
     const half = 5.0;
@@ -132,6 +175,12 @@ class StadiumMapPainter extends CustomPainter {
         Offset(p.dx + half, p.dy + half), glowPaint);
     canvas.drawLine(Offset(p.dx - half, p.dy + half),
         Offset(p.dx + half, p.dy - half), glowPaint);
+
+    // x 선 테두리
+    canvas.drawLine(Offset(p.dx - half, p.dy - half),
+        Offset(p.dx + half, p.dy + half), whiteOutlinePaint);
+    canvas.drawLine(Offset(p.dx - half, p.dy + half),
+        Offset(p.dx + half, p.dy - half), whiteOutlinePaint);
 
     // 실제 X 선
     canvas.drawLine(Offset(p.dx - half, p.dy - half),
@@ -498,32 +547,6 @@ class StadiumMapPainter extends CustomPainter {
     }
   }
 
-  void _drawGlow(Canvas canvas, Offset point) {
-    final rect = RRect.fromRectAndRadius(
-      Rect.fromCenter(center: point, width: 50, height: 15),
-      const Radius.circular(8),
-    );
-
-    final paints = [
-      Paint()
-        ..color = const Color(0x4D3AF766)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15)
-        ..style = PaintingStyle.fill,
-      Paint()
-        ..color = const Color(0x663AF766)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
-        ..style = PaintingStyle.fill,
-      Paint()
-        ..color = const Color(0x993AF766)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
-        ..style = PaintingStyle.fill,
-    ];
-
-    for (var paint in paints) {
-      canvas.drawRRect(rect, paint);
-    }
-  }
-
   Map<String, Color> _getZoneColors() {
     return {
       'A': const Color(0xFF9E876D),
@@ -547,9 +570,17 @@ class StadiumMapPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant StadiumMapPainter oldDelegate) {
-    return evacuationPath != oldDelegate.evacuationPath ||
-        closedExits != oldDelegate.closedExits ||
-        fireLocation != oldDelegate.fireLocation;
+    // fireLocation 비교
+    final fireLocationChanged =
+        (fireLocation?.dx != oldDelegate.fireLocation?.dx) ||
+            (fireLocation?.dy != oldDelegate.fireLocation?.dy);
+
+    return fireLocationChanged ||
+        !const ListEquality()
+            .equals(evacuationPath, oldDelegate.evacuationPath) ||
+        !const ListEquality().equals(closedExits, oldDelegate.closedExits) ||
+        !const ListEquality<Offset>()
+            .equals(fireSpreadNodes, oldDelegate.fireSpreadNodes);
   }
 }
 

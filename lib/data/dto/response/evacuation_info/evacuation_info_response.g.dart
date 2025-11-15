@@ -15,6 +15,9 @@ _$EvacuationInfoResponseImpl _$$EvacuationInfoResponseImplFromJson(
       optimalExit: json['optimal_exit'] as String?,
       estimatedTime: json['estimated_time'] as String?,
       fireLocation: json['fire_location'] as String?,
+      fireSpreadNodes: (json['fire_spread_nodes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       closedExits: (json['closed_exits'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -34,6 +37,7 @@ Map<String, dynamic> _$$EvacuationInfoResponseImplToJson(
       'optimal_exit': instance.optimalExit,
       'estimated_time': instance.estimatedTime,
       'fire_location': instance.fireLocation,
+      'fire_spread_nodes': instance.fireSpreadNodes,
       'closed_exits': instance.closedExits,
       'evacuation_path': instance.evacuationPath,
       'path_length': instance.pathLength,

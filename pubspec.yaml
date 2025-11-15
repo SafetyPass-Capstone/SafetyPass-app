@@ -35,6 +35,8 @@ dependencies:
   #csv
   csv: ^5.0.0
 
+  collection: ^1.17.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
