@@ -168,6 +168,8 @@ class _EmergencyModeScreenState extends State<EmergencyModeScreen> {
           closedExits:
               provider.evacuationInfo?.closedExits ?? const [], // 폐쇠 출구 전달
           fireLocation: provider.evacuationInfo?.fireLocation, // 화제 위치 전달
+          fireSpreadNodes: provider.evacuationInfo?.fireSpreadNodes ??
+              const [], // 화재 확선 위치 전달
         ),
       ),
     );

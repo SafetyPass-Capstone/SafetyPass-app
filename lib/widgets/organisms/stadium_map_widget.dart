@@ -11,12 +11,14 @@ class StadiumMapWidget extends StatefulWidget {
   final List<String> evacuationPath;
   final List<String> closedExits;
   final String? fireLocation;
+  final List<String> fireSpreadNodes;
 
   const StadiumMapWidget({
     Key? key,
     this.evacuationPath = const [],
     this.closedExits = const [],
     this.fireLocation,
+    this.fireSpreadNodes = const [],
   }) : super(key: key);
 
   @override
@@ -24,7 +26,6 @@ class StadiumMapWidget extends StatefulWidget {
 }
 
 class _StadiumMapWidgetState extends State<StadiumMapWidget> {
-  // 데이터
   List<SeatNode> seats = [];
   List<ExitNode> exits = [];
   List<LayerPolygon> aisles = [];
@@ -32,7 +33,6 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
   List<AisleNode> aisleNodes = [];
   List<EdgeConnection> edges = [];
 
-  // 좌표 매핑 - nodeId -> (x, y)
   Map<String, Offset> nodeCoordinates = {};
 
   bool isLoading = true;
@@ -60,26 +60,20 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
       _loadAisleNodesData(),
       _loadEdgesData(),
     ]);
-
-    // 좌표 매핑 생성
     _buildNodeCoordinateMap();
   }
 
-  // 좌표 매핑 생성 (추가)
   void _buildNodeCoordinateMap() {
     nodeCoordinates.clear();
 
-    // Seats 추가
     for (var seat in seats) {
       nodeCoordinates[seat.node] = Offset(seat.x, seat.y);
     }
 
-    // Exits 추가
     for (var exit in exits) {
       nodeCoordinates[exit.nodeId] = Offset(exit.x, exit.y);
     }
 
-    // AisleNodes 추가
     for (var node in aisleNodes) {
       nodeCoordinates[node.id] = Offset(node.x, node.y);
     }
@@ -108,7 +102,6 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
           }
         }
       }
-
       print('✓ Loaded ${aisleNodes.length} aisle nodes');
     } catch (e) {
       print('✗ Error loading aisle nodes: $e');
@@ -139,7 +132,6 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
           }
         }
       }
-
       print('✓ Loaded ${edges.length} edges from CSV');
     } catch (e) {
       print('✗ Error loading edges: $e');
@@ -256,7 +248,16 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
 
     Offset? fireOffset;
     if (widget.fireLocation != null) {
-      fireOffset = nodeCoordinates[widget.fireLocation!]; // ← 노드ID를 좌표로
+      fireOffset = nodeCoordinates[widget.fireLocation!];
+    }
+
+    // 확산 노드 좌표 변환
+    List<Offset> fireSpreadOffsets = [];
+    for (var nodeId in widget.fireSpreadNodes) {
+      final offset = nodeCoordinates[nodeId];
+      if (offset != null) {
+        fireSpreadOffsets.add(offset);
+      }
     }
 
     return InteractiveViewer(
@@ -283,6 +284,7 @@ class _StadiumMapWidgetState extends State<StadiumMapWidget> {
             nodeCoordinates: nodeCoordinates,
             closedExits: widget.closedExits,
             fireLocation: fireOffset,
+            fireSpreadNodes: fireSpreadOffsets,
           ),
         ),
       ),
