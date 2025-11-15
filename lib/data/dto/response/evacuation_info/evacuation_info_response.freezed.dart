@@ -33,6 +33,8 @@ mixin _$EvacuationInfoResponse {
   String? get estimatedTime => throw _privateConstructorUsedError;
   @JsonKey(name: 'fire_location')
   String? get fireLocation => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fire_spread_nodes')
+  List<String>? get fireSpreadNodes => throw _privateConstructorUsedError;
   @JsonKey(name: 'closed_exits')
   List<String>? get closedExits => throw _privateConstructorUsedError;
   @JsonKey(name: 'evacuation_path')
@@ -61,6 +63,7 @@ abstract class $EvacuationInfoResponseCopyWith<$Res> {
       @JsonKey(name: 'optimal_exit') String? optimalExit,
       @JsonKey(name: 'estimated_time') String? estimatedTime,
       @JsonKey(name: 'fire_location') String? fireLocation,
+      @JsonKey(name: 'fire_spread_nodes') List<String>? fireSpreadNodes,
       @JsonKey(name: 'closed_exits') List<String>? closedExits,
       @JsonKey(name: 'evacuation_path') List<String>? evacuationPath,
       @JsonKey(name: 'path_length') int? pathLength,
@@ -87,6 +90,7 @@ class _$EvacuationInfoResponseCopyWithImpl<$Res,
     Object? optimalExit = freezed,
     Object? estimatedTime = freezed,
     Object? fireLocation = freezed,
+    Object? fireSpreadNodes = freezed,
     Object? closedExits = freezed,
     Object? evacuationPath = freezed,
     Object? pathLength = freezed,
@@ -117,6 +121,10 @@ class _$EvacuationInfoResponseCopyWithImpl<$Res,
           ? _value.fireLocation
           : fireLocation // ignore: cast_nullable_to_non_nullable
               as String?,
+      fireSpreadNodes: freezed == fireSpreadNodes
+          ? _value.fireSpreadNodes
+          : fireSpreadNodes // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       closedExits: freezed == closedExits
           ? _value.closedExits
           : closedExits // ignore: cast_nullable_to_non_nullable
@@ -153,6 +161,7 @@ abstract class _$$EvacuationInfoResponseImplCopyWith<$Res>
       @JsonKey(name: 'optimal_exit') String? optimalExit,
       @JsonKey(name: 'estimated_time') String? estimatedTime,
       @JsonKey(name: 'fire_location') String? fireLocation,
+      @JsonKey(name: 'fire_spread_nodes') List<String>? fireSpreadNodes,
       @JsonKey(name: 'closed_exits') List<String>? closedExits,
       @JsonKey(name: 'evacuation_path') List<String>? evacuationPath,
       @JsonKey(name: 'path_length') int? pathLength,
@@ -178,6 +187,7 @@ class __$$EvacuationInfoResponseImplCopyWithImpl<$Res>
     Object? optimalExit = freezed,
     Object? estimatedTime = freezed,
     Object? fireLocation = freezed,
+    Object? fireSpreadNodes = freezed,
     Object? closedExits = freezed,
     Object? evacuationPath = freezed,
     Object? pathLength = freezed,
@@ -208,6 +218,10 @@ class __$$EvacuationInfoResponseImplCopyWithImpl<$Res>
           ? _value.fireLocation
           : fireLocation // ignore: cast_nullable_to_non_nullable
               as String?,
+      fireSpreadNodes: freezed == fireSpreadNodes
+          ? _value._fireSpreadNodes
+          : fireSpreadNodes // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       closedExits: freezed == closedExits
           ? _value._closedExits
           : closedExits // ignore: cast_nullable_to_non_nullable
@@ -238,11 +252,13 @@ class _$EvacuationInfoResponseImpl implements _EvacuationInfoResponse {
       @JsonKey(name: 'optimal_exit') this.optimalExit,
       @JsonKey(name: 'estimated_time') this.estimatedTime,
       @JsonKey(name: 'fire_location') this.fireLocation,
+      @JsonKey(name: 'fire_spread_nodes') final List<String>? fireSpreadNodes,
       @JsonKey(name: 'closed_exits') final List<String>? closedExits,
       @JsonKey(name: 'evacuation_path') final List<String>? evacuationPath,
       @JsonKey(name: 'path_length') this.pathLength,
       @JsonKey(name: 'total_distance_mm') this.totalDistanceMm})
-      : _closedExits = closedExits,
+      : _fireSpreadNodes = fireSpreadNodes,
+        _closedExits = closedExits,
         _evacuationPath = evacuationPath;
 
   factory _$EvacuationInfoResponseImpl.fromJson(Map<String, dynamic> json) =>
@@ -268,6 +284,17 @@ class _$EvacuationInfoResponseImpl implements _EvacuationInfoResponse {
   @override
   @JsonKey(name: 'fire_location')
   final String? fireLocation;
+  final List<String>? _fireSpreadNodes;
+  @override
+  @JsonKey(name: 'fire_spread_nodes')
+  List<String>? get fireSpreadNodes {
+    final value = _fireSpreadNodes;
+    if (value == null) return null;
+    if (_fireSpreadNodes is EqualUnmodifiableListView) return _fireSpreadNodes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   final List<String>? _closedExits;
   @override
   @JsonKey(name: 'closed_exits')
@@ -299,7 +326,7 @@ class _$EvacuationInfoResponseImpl implements _EvacuationInfoResponse {
 
   @override
   String toString() {
-    return 'EvacuationInfoResponse(isEmergency: $isEmergency, message: $message, seatId: $seatId, optimalExit: $optimalExit, estimatedTime: $estimatedTime, fireLocation: $fireLocation, closedExits: $closedExits, evacuationPath: $evacuationPath, pathLength: $pathLength, totalDistanceMm: $totalDistanceMm)';
+    return 'EvacuationInfoResponse(isEmergency: $isEmergency, message: $message, seatId: $seatId, optimalExit: $optimalExit, estimatedTime: $estimatedTime, fireLocation: $fireLocation, fireSpreadNodes: $fireSpreadNodes, closedExits: $closedExits, evacuationPath: $evacuationPath, pathLength: $pathLength, totalDistanceMm: $totalDistanceMm)';
   }
 
   @override
@@ -317,6 +344,8 @@ class _$EvacuationInfoResponseImpl implements _EvacuationInfoResponse {
                 other.estimatedTime == estimatedTime) &&
             (identical(other.fireLocation, fireLocation) ||
                 other.fireLocation == fireLocation) &&
+            const DeepCollectionEquality()
+                .equals(other._fireSpreadNodes, _fireSpreadNodes) &&
             const DeepCollectionEquality()
                 .equals(other._closedExits, _closedExits) &&
             const DeepCollectionEquality()
@@ -337,6 +366,7 @@ class _$EvacuationInfoResponseImpl implements _EvacuationInfoResponse {
       optimalExit,
       estimatedTime,
       fireLocation,
+      const DeepCollectionEquality().hash(_fireSpreadNodes),
       const DeepCollectionEquality().hash(_closedExits),
       const DeepCollectionEquality().hash(_evacuationPath),
       pathLength,
@@ -359,17 +389,18 @@ class _$EvacuationInfoResponseImpl implements _EvacuationInfoResponse {
 
 abstract class _EvacuationInfoResponse implements EvacuationInfoResponse {
   const factory _EvacuationInfoResponse(
-          {@JsonKey(name: 'is_emergency') required final bool isEmergency,
-          @JsonKey(name: 'message') final String? message,
-          @JsonKey(name: 'seat_id') final String? seatId,
-          @JsonKey(name: 'optimal_exit') final String? optimalExit,
-          @JsonKey(name: 'estimated_time') final String? estimatedTime,
-          @JsonKey(name: 'fire_location') final String? fireLocation,
-          @JsonKey(name: 'closed_exits') final List<String>? closedExits,
-          @JsonKey(name: 'evacuation_path') final List<String>? evacuationPath,
-          @JsonKey(name: 'path_length') final int? pathLength,
-          @JsonKey(name: 'total_distance_mm') final double? totalDistanceMm}) =
-      _$EvacuationInfoResponseImpl;
+      {@JsonKey(name: 'is_emergency') required final bool isEmergency,
+      @JsonKey(name: 'message') final String? message,
+      @JsonKey(name: 'seat_id') final String? seatId,
+      @JsonKey(name: 'optimal_exit') final String? optimalExit,
+      @JsonKey(name: 'estimated_time') final String? estimatedTime,
+      @JsonKey(name: 'fire_location') final String? fireLocation,
+      @JsonKey(name: 'fire_spread_nodes') final List<String>? fireSpreadNodes,
+      @JsonKey(name: 'closed_exits') final List<String>? closedExits,
+      @JsonKey(name: 'evacuation_path') final List<String>? evacuationPath,
+      @JsonKey(name: 'path_length') final int? pathLength,
+      @JsonKey(name: 'total_distance_mm')
+      final double? totalDistanceMm}) = _$EvacuationInfoResponseImpl;
 
   factory _EvacuationInfoResponse.fromJson(Map<String, dynamic> json) =
       _$EvacuationInfoResponseImpl.fromJson;
@@ -392,6 +423,9 @@ abstract class _EvacuationInfoResponse implements EvacuationInfoResponse {
   @override
   @JsonKey(name: 'fire_location')
   String? get fireLocation;
+  @override
+  @JsonKey(name: 'fire_spread_nodes')
+  List<String>? get fireSpreadNodes;
   @override
   @JsonKey(name: 'closed_exits')
   List<String>? get closedExits;

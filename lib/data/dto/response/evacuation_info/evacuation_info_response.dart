@@ -16,6 +16,7 @@ class EvacuationInfoResponse with _$EvacuationInfoResponse {
     @JsonKey(name: 'optimal_exit') String? optimalExit,
     @JsonKey(name: 'estimated_time') String? estimatedTime,
     @JsonKey(name: 'fire_location') String? fireLocation,
+    @JsonKey(name: 'fire_spread_nodes') List<String>? fireSpreadNodes,
     @JsonKey(name: 'closed_exits') List<String>? closedExits,
     @JsonKey(name: 'evacuation_path') List<String>? evacuationPath,
     @JsonKey(name: 'path_length') int? pathLength,
