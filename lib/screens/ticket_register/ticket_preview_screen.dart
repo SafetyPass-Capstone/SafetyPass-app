@@ -145,21 +145,20 @@ class TicketPreviewScreen extends StatelessWidget {
     SafetyPassTextStyle.bodySB17.copyWith(color: const Color(0xFF1A0A49));
     Widget valueWidget;
 
-    // 'k'가 '무대 배치'이고 'v'가 'I'로 시작하는 경우 (예: "I자형")
     if (k == '무대 배치' && v.startsWith('I')) {
       const specialColor = Color(0xFF1A0A49);
 
       valueWidget = RichText(
         text: TextSpan(
-          // "자형" 부분에 적용될 기본 스타일 (bodyR15 + 색상)
+          // "자형" 부분에 적용될 기본 스타일
           style: SafetyPassTextStyle.bodyR15.copyWith(color: specialColor),
           children: [
-            // "I" 부분 (bodyI + 색상)
+            // "I" 부분
             TextSpan(
-              text: v.substring(0, 1), // "I"
+              text: v.substring(0, 1),
               style: SafetyPassTextStyle.bodyI.copyWith(color: specialColor),
             ),
-            // "자형" 부분 (위의 부모 style 상속)
+            // "자형" 부분
             TextSpan(
               text: v.substring(1),
             ),
