@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -546,32 +547,6 @@ class StadiumMapPainter extends CustomPainter {
     }
   }
 
-  void _drawGlow(Canvas canvas, Offset point) {
-    final rect = RRect.fromRectAndRadius(
-      Rect.fromCenter(center: point, width: 50, height: 15),
-      const Radius.circular(8),
-    );
-
-    final paints = [
-      Paint()
-        ..color = const Color(0x4D3AF766)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15)
-        ..style = PaintingStyle.fill,
-      Paint()
-        ..color = const Color(0x663AF766)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10)
-        ..style = PaintingStyle.fill,
-      Paint()
-        ..color = const Color(0x993AF766)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5)
-        ..style = PaintingStyle.fill,
-    ];
-
-    for (var paint in paints) {
-      canvas.drawRRect(rect, paint);
-    }
-  }
-
   Map<String, Color> _getZoneColors() {
     return {
       'A': const Color(0xFF9E876D),
@@ -595,10 +570,17 @@ class StadiumMapPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant StadiumMapPainter oldDelegate) {
-    return evacuationPath != oldDelegate.evacuationPath ||
-        closedExits != oldDelegate.closedExits ||
-        fireLocation != oldDelegate.fireLocation ||
-        fireSpreadNodes != oldDelegate.fireSpreadNodes;
+    // fireLocation 비교
+    final fireLocationChanged =
+        (fireLocation?.dx != oldDelegate.fireLocation?.dx) ||
+            (fireLocation?.dy != oldDelegate.fireLocation?.dy);
+
+    return fireLocationChanged ||
+        !const ListEquality()
+            .equals(evacuationPath, oldDelegate.evacuationPath) ||
+        !const ListEquality().equals(closedExits, oldDelegate.closedExits) ||
+        !const ListEquality<Offset>()
+            .equals(fireSpreadNodes, oldDelegate.fireSpreadNodes);
   }
 }
 
